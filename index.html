@@ -1,0 +1,352 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Yi Wei Fung&#39;s Research Page</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: academic homepage. Sticky nav, profile column beside biography,
+   then publications as text rows with a point-cloud figure on the right.
+   White ground, pastel fills carry the colour, deep violet ink carries the text. */
+:root {
+  --bg: #ffffff;
+  --ink: #2a2838;
+  --muted: #6a6880;
+  --line: #ecebf3;
+  --link: #6450c4;
+  --lavender: #e8e1fc;
+  --mint: #d7f2e7;
+  --peach: #fde4d7;
+  --sky: #dcecfc;
+  --pink: #fcdfea;
+  --butter: #fbf1c7;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 6px; }
+p { margin: 0; }
+h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; line-height: 1.2; }
+
+.wrap {
+  max-width: 1040px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* nav */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 24px; padding-block: 14px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 1.15rem; color: var(--ink); }
+.nav ul { list-style: none; display: flex; gap: 6px; margin: 0; padding: 0; }
+.nav li a { display: block; padding: 4px 12px; border-radius: 999px; color: var(--ink); font-weight: 500; font-size: 0.97rem; }
+.nav li a:hover { background: var(--lavender); text-decoration: none; }
+
+section { scroll-margin-top: 80px; padding-block: 56px 8px; }
+section > .wrap { display: flex; flex-direction: column; gap: 28px; }
+
+h2 { font-size: 1.9rem; font-weight: 700; }
+h2 span { padding-inline: 4px; margin-inline: -4px; background: linear-gradient(transparent 58%, var(--mark) 58%); }
+
+/* about */
+.about { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 56px; align-items: start; }
+.profile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+.avatar {
+  width: 200px; height: 200px; max-width: 100%; border-radius: 50%;
+  background: var(--lavender); overflow: hidden; margin-bottom: 14px;
+}
+.avatar canvas { width: 100%; height: 100%; display: block; }
+.profile h1 { font-size: 1.9rem; font-weight: 700; }
+.role { color: var(--muted); font-size: 1.05rem; }
+.chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0 0; padding: 0; }
+.chip { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 0.9rem; font-weight: 500; color: var(--ink); }
+.todo { border: 1.5px dashed #c9c5dc; color: var(--muted); background: none; }
+
+.bio { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.bio .prose { display: flex; flex-direction: column; gap: 14px; max-width: 66ch; }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
+.interests { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.edu { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.edu strong { display: block; font-weight: 600; line-height: 1.4; }
+.edu span { color: var(--muted); font-size: 0.95rem; }
+
+/* publications */
+.pubs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 36px; }
+.pub { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 32px; align-items: center; }
+.pub-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pub h3 { font-size: 1.3rem; margin: 0; }
+.venue { align-self: flex-start; padding: 2px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.01em; }
+.summary { max-width: 62ch; }
+.authors { color: var(--muted); font-size: 0.97rem; }
+.authors b { color: var(--ink); font-weight: 600; }
+.pub .chips { justify-content: flex-start; margin-top: 4px; }
+.thumb { width: 100%; height: 160px; border-radius: 18px; overflow: hidden; }
+.thumb canvas { width: 100%; height: 100%; display: block; }
+
+/* experience */
+.xp { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.xp li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 24px; }
+.xp .where { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+.xp .what strong { font-weight: 600; }
+.xp .what p { color: var(--muted); max-width: 62ch; }
+
+.contact p { max-width: 62ch; }
+.contact .chips { justify-content: flex-start; margin-top: 0; }
+
+footer { margin-top: 64px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+footer .wrap { padding-block: 22px 32px; }
+
+@media (max-width: 780px) {
+  .about { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .pub { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .thumb { order: -1; height: 180px; }
+  .xp li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  section { padding-block: 40px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#about">Yi Wei Fung</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#about">Home</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="about">
+  <div class="wrap">
+    <div class="about">
+      <div class="profile">
+        <!-- Swap this canvas for <img src="your-photo.jpg" alt="Yi Wei Fung"> when you have a photo -->
+        <div class="avatar"><canvas id="fig-avatar" aria-label="Rotating 3D point cloud of a human body, coloured by body part" role="img"></canvas></div>
+        <h1>Yi Wei Fung</h1>
+        <p class="role">Ph.D. Student</p>
+        <p class="role">Curtin University</p>
+        <!-- Replace each placeholder with <a class="chip" style="background:var(--sky)" href="https://...">Label</a> -->
+        <ul class="chips">
+          <li><a class="chip" style="background:var(--sky)" href="#contact">Email</a></li>
+          <li><a class="chip" style="background:var(--mint)" href="https://scholar.google.com/citations?user=jkVCmwwAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+          <li><a class="chip" style="background:var(--lavender)" href="https://github.com/wyedoubleu" target="_blank" rel="noopener">GitHub</a></li>
+          <li><span class="chip todo">CV</span></li>
+        </ul>
+      </div>
+
+      <div class="bio">
+        <div class="cols">
+          <div>
+            <h3>Interests</h3>
+            <ul class="interests">
+              <li><span class="chip" style="background:var(--lavender)">3D Virtual Try-On</span></li>
+              <li><span class="chip" style="background:var(--mint)">Clothing Segmentation</span></li>
+              <li><span class="chip" style="background:var(--peach)">Body Part Segmentation</span></li>
+              <li><span class="chip" style="background:var(--sky)">3D Body Fitting</span></li>
+              <li><span class="chip" style="background:var(--pink)">Clothing Transfer</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Education</h3>
+            <ul class="edu">
+              <li><strong>Ph.D., Computer Vision</strong><span>Curtin University</span></li>
+              <li><strong>B.Eng. in Electrical and Electronics Engineering, 2023</strong><span>Curtin University</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <h2 style="--mark: var(--mint)"><span>Publications</span></h2>
+    <ul class="pubs">
+      <li class="pub">
+        <div class="pub-text">
+          <h3>Recovering the Textured Underlying Body from Clothed 3D Scans</h3>
+          <span class="venue" style="background:var(--peach)">In preparation</span>
+          <p class="summary">A two-stage method that first predicts a sparse inner body beneath the clothing, then reconstructs the full textured underlying body from the clothed scan.</p>
+          <p class="authors"><b>Yi Wei Fung</b>, co-authors to be added</p>
+          <ul class="chips">
+            <li><span class="chip todo">PDF</span></li>
+            <li><span class="chip todo">Project</span></li>
+          </ul>
+        </div>
+        <div class="thumb" style="background:#fff5ef"><canvas id="fig-inner" aria-label="Point cloud of a body inside a looser clothed surface" role="img"></canvas></div>
+      </li>
+      <li class="pub">
+        <div class="pub-text">
+          <h3>PartCloth3D: Point Cloud Clothing Segmentation with Body Part Priors</h3>
+          <span class="venue" style="background:var(--lavender)">Image and Vision Computing · under review</span>
+          <p class="summary">A clothing segmentation framework for 3D body scans. A body part segmentation module refined by graph-cut optimisation supplies body priors, which are fused with point and clothing-class features to label every point.</p>
+          <p class="authors"><b>Yi Wei Fung</b>, co-authors to be added</p>
+          <ul class="chips">
+            <li><span class="chip todo">PDF</span></li>
+            <li><a class="chip" style="background:var(--mint)" href="https://github.com/wyedoubleu/PartCloth3D" target="_blank" rel="noopener">Code</a></li>
+            <li><a class="chip" style="background:var(--sky)" href="https://partcloth3d.github.io/" target="_blank" rel="noopener">Project</a></li>
+          </ul>
+        </div>
+        <div class="thumb" style="background:#f5f2fe"><canvas id="fig-cloth" aria-label="Point cloud of a clothed body, coloured by clothing class" role="img"></canvas></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2 style="--mark: var(--sky)"><span>Experience</span></h2>
+    <ul class="xp">
+      <li>
+        <span class="where">AI3D PLT</span>
+        <div class="what"><strong>Research Intern, 2D Virtual Try-On</strong>
+          <p>Reconstructed 3D clothing and bodies from images and worked on depth estimation.</p></div>
+      </li>
+      <li>
+        <span class="where">Intel</span>
+        <div class="what"><strong>Intern, 2022 and 2023</strong>
+          <p>CPU structural design, and silicon pre- and post-validation.</p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2 style="--mark: var(--pink)"><span>Contact</span></h2>
+    <p>I am currently looking for research internship opportunities and collaborations. Feel free to contact me for potential collaborations and discussions.</p>
+    <ul class="chips">
+      <li><a class="chip" style="background:var(--pink); user-select:all" href="mailto:yiwei.fung@postgrad.curtin.edu.my">yiwei.fung@postgrad.curtin.edu.my</a></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">© 2026 Yi Wei Fung · Curtin University</div></footer>
+
+<script>
+(function () {
+  // Small seeded generator so the figures look the same on every load.
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  // A body built from ellipsoids: [cx, cy, cz, rx, ry, rz, bodyPart, clothingClass]
+  var PARTS = [
+    [0, 1.62, 0, .11, .13, .11, 'head', 'skin'],
+    [0, 1.70, -.02, .115, .09, .115, 'head', 'hair'],
+    [0, 1.20, 0, .20, .30, .12, 'torso', 'top'],
+    [0, .92, 0, .19, .14, .12, 'hips', 'bottom'],
+    [-.29, 1.28, 0, .06, .19, .06, 'armL', 'top'],
+    [.29, 1.28, 0, .06, .19, .06, 'armR', 'top'],
+    [-.36, .96, 0, .045, .18, .045, 'armL', 'skin'],
+    [.36, .96, 0, .045, .18, .045, 'armR', 'skin'],
+    [-.10, .62, 0, .085, .25, .085, 'legL', 'bottom'],
+    [.10, .62, 0, .085, .25, .085, 'legR', 'bottom'],
+    [-.10, .25, 0, .06, .22, .06, 'legL', 'skin'],
+    [.10, .25, 0, .06, .22, .06, 'legR', 'skin'],
+    [-.10, .03, .05, .06, .04, .11, 'legL', 'shoe'],
+    [.10, .03, .05, .06, .04, .11, 'legR', 'shoe']
+  ];
+  var BODY = { head: '#f2a3c0', torso: '#a995ee', hips: '#7fcdb4', armL: '#8fc0f0', armR: '#f4b08f', legL: '#e6c95f', legR: '#7fcdb4' };
+  var CLOTH = { skin: '#f4b79b', hair: '#b9a48c', top: '#a995ee', bottom: '#8fc0f0', shoe: '#f2a3c0' };
+
+  function sample(seed, colourOf, inflate, density) {
+    var r = rng(seed), pts = [];
+    PARTS.forEach(function (p) {
+      var k = inflate ? inflate(p) : 1;
+      if (!k) return;
+      var rx = p[3] * k, ry = p[4] * (k > 1 ? 1.04 : 1), rz = p[5] * k;
+      var n = Math.round(density * (rx * ry + ry * rz + rx * rz));
+      for (var i = 0; i < n; i++) {
+        var u = r() * 2 - 1, t = r() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+        pts.push({ x: p[0] + rx * s * Math.cos(t), y: p[1] + ry * u, z: p[2] + rz * s * Math.sin(t), c: colourOf(p) });
+      }
+    });
+    return pts;
+  }
+
+  function draw(canvas, pts, angle, zoom) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+    if (!w || !h) return;
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    var s = h / 1.95 * zoom, ca = Math.cos(angle), sa = Math.sin(angle);
+    var proj = pts.map(function (p) {
+      return { px: w / 2 + (p.x * ca + p.z * sa) * s, py: h / 2 - (p.y - .87) * s, d: -p.x * sa + p.z * ca, c: p.c, a: p.a || 1 };
+    }).sort(function (a, b) { return a.d - b.d; });
+    proj.forEach(function (q) {
+      var depth = Math.max(0, Math.min(1, (q.d + .4) / .8));
+      ctx.globalAlpha = (.45 + .55 * depth) * q.a;
+      ctx.fillStyle = q.c;
+      ctx.beginPath();
+      ctx.arc(q.px, q.py, dpr * (.9 + .7 * depth), 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  var avatar = document.getElementById('fig-avatar');
+  var cloth = document.getElementById('fig-cloth');
+  var inner = document.getElementById('fig-inner');
+
+  var bodyPts = sample(7, function (p) { return BODY[p[6]]; }, null, 3600);
+  var clothPts = sample(11, function (p) { return CLOTH[p[7]]; }, null, 3600);
+  // Loose garment shell around the body, plus the body underneath.
+  var shell = sample(23, function () { return '#b7a6f2'; }, function (p) {
+    return (p[7] === 'top' || p[7] === 'bottom') ? 1.32 : 0;
+  }, 2600).map(function (p) { p.a = .5; return p; });
+  var innerPts = sample(29, function () { return '#f09f7e'; }, null, 2600).concat(shell);
+
+  function still() {
+    draw(cloth, clothPts, .55, .92);
+    draw(inner, innerPts, -.5, .92);
+  }
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var start = null;
+  function frame(t) {
+    if (start === null) start = t;
+    draw(avatar, bodyPts, .5 + (t - start) / 5200, .86);
+    requestAnimationFrame(frame);
+  }
+  draw(avatar, bodyPts, .5, .86);
+  still();
+  if (!reduce) requestAnimationFrame(frame);
+  window.addEventListener('resize', function () { still(); if (reduce) draw(avatar, bodyPts, .5, .86); });
+})();
+</script>
+
+</body></html>
