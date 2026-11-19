@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dressing the Digital Human</title>
+<meta name="description" content="A plain-language tour of our open-access review of 3D virtual try-on: how digital garments are made, how people are rebuilt as avatars, and how garments are fitted onto them, with benchmark comparisons and open challenges.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dressing the digital human: a tour of 3D virtual try-on">
+<meta property="og:description" content="What our review in Multimedia Tools and Applications found about 3D garment generation, avatar reconstruction and body-garment transformation.">
+<meta property="og:image" content="https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs11042-026-21423-2/MediaObjects/11042_2026_21423_Fig1_HTML.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  /* the five brand pastels (constant in both themes) */
+  --pastel-blue: #D0D9E2;
+  --pastel-lavender: #C0BFCF;
+  --pastel-slate: #8391A3;
+  --pastel-blush: #EAE2DD;
+  --pastel-aqua: #C9DFE5;
+
+  --bg: #fbf9f7;
+  --surface: #ffffff;
+  --surface-2: #f6f2ef;
+  --plate: #ffffff;
+  --ink: #2f3640;
+  --ink-2: #545d6b;
+  --muted: #687080;
+  --rule: #ece6e1;
+  --rule-strong: #d6cec8;
+  --accent: #5e6c82;
+  --btn: #D0D9E2;
+  --btn-ink: #2f3640;
+  --tint-blue: #eef2f6;
+  --tint-lavender: #eeedf3;
+  --tint-aqua: #ebf4f6;
+  --tint-blush: #f6f1ee;
+  --s1: #7392d2;
+  --s2: #e08c72;
+  --s3: #4fb394;
+  --grid: #eee9e5;
+  --shadow: 0 1px 2px rgba(47,54,64,.03), 0 6px 20px rgba(47,54,64,.04);
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+/* Dark theme only when the reader picks it with the toggle. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c2129;
+  --surface: #252b35;
+  --surface-2: #2c333e;
+  --plate: #f4f1ee;
+  --ink: #eee8e4;
+  --ink-2: #c9c6d3;
+  --muted: #a3abb8;
+  --rule: #343c48;
+  --rule-strong: #4a5362;
+  --accent: #C9DFE5;
+  --btn: #C0BFCF;
+  --btn-ink: #1c2129;
+  --tint-blue: #2c3644;
+  --tint-lavender: #34323f;
+  --tint-aqua: #253a41;
+  --tint-blush: #2e2b2b;
+  --s1: #6a86cc;
+  --s2: #cc6b4b;
+  --s3: #2f9e86;
+  --grid: #343c48;
+  --shadow: none;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- top bar ---------- */
+.progress { position: fixed; inset: 0 auto auto 0; height: 3px; width: 0; background: var(--pastel-lavender); z-index: 30; }
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-in { max-width: 1120px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; gap: 16px; font-family: var(--sans); font-size: .875rem; }
+.brand { font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: .01em; margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand span { color: var(--muted); font-weight: 400; }
+.icon-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer; }
+.icon-btn:hover { border-color: var(--rule-strong); }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-sun { display: none; }
+:root[data-theme="dark"] .icon-sun { display: block; }
+:root[data-theme="dark"] .icon-moon { display: none; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; font-family: var(--sans); font-size: .875rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
+.btn-primary { background: var(--btn); color: var(--btn-ink); }
+.btn-primary:hover { filter: brightness(.95); }
+.btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--rule); }
+.btn-ghost:hover { border-color: var(--rule-strong); }
+
+/* ---------- layout ---------- */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.prose > *:not(section), .prose section > * { max-width: 680px; margin-left: auto; margin-right: auto; }
+.prose .wide { max-width: 1040px; }
+.prose .mid { max-width: 860px; }
+section { padding-top: 24px; }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; color: var(--ink); }
+h2 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.35rem); margin: 72px auto 16px; }
+h3 { font-size: 1.4rem; margin: 40px auto 8px; }
+p { margin: 0 auto 18px; }
+.prose section > ul, .prose section > ol, .callout ul { padding-left: 1.2em; margin-bottom: 20px; }
+.prose section > ul > li, .prose section > ol > li, .callout li, .tldr li { margin-bottom: 8px; }
+li::marker { color: var(--muted); }
+strong { font-weight: 600; }
+.kicker { font-family: var(--sans); font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 auto 8px; display: block; }
+h2 + .lede, .lede { font-size: 1.25rem; color: var(--ink-2); }
+.sans { font-family: var(--sans); }
+
+/* ---------- hero ---------- */
+.hero { padding: 56px 0 8px; }
+#takeaways h2 { margin-top: 40px; }
+.hero .kicker { margin-bottom: 16px; }
+.hero h1 { font-size: clamp(2.4rem, 1.6rem + 3.6vw, 4.1rem); line-height: 1.03; margin: 0 auto 20px; font-weight: 500; letter-spacing: -.02em; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero .dek { font-size: clamp(1.2rem, 1.05rem + .5vw, 1.4rem); color: var(--ink-2); line-height: 1.5; margin-bottom: 28px; }
+.byline { display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: var(--sans); font-size: .875rem; color: var(--muted); padding: 16px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 24px; }
+.byline strong { color: var(--ink); font-weight: 600; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: .75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--pastel-aqua); color: #2f3640; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- figures ---------- */
+figure { margin: 36px auto; }
+.plate { background: var(--plate); border-radius: 12px; padding: 14px; border: 1px solid var(--rule); box-shadow: var(--shadow); }
+.plate a { display: block; border-radius: 6px; overflow: hidden; }
+.plate img { width: 100%; }
+figcaption { font-family: var(--sans); font-size: .875rem; line-height: 1.5; color: var(--ink-2); margin-top: 12px; max-width: 760px; }
+figcaption .fig-n { font-weight: 700; color: var(--ink); }
+figcaption .credit { color: var(--muted); }
+
+/* ---------- takeaways ---------- */
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 8px auto 28px; }
+.tile { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 16px; box-shadow: var(--shadow); }
+.tile:nth-child(1) { background: var(--tint-blue); border-color: transparent; }
+.tile:nth-child(2) { background: var(--tint-lavender); border-color: transparent; }
+.tile:nth-child(3) { background: var(--tint-aqua); border-color: transparent; }
+.tile:nth-child(4) { background: var(--tint-blush); border-color: transparent; }
+.tile { border-top: 4px solid transparent !important; }
+.tile:nth-child(1) { border-top-color: var(--pastel-blue) !important; }
+.tile:nth-child(2) { border-top-color: var(--pastel-lavender) !important; }
+.tile:nth-child(3) { border-top-color: var(--pastel-aqua) !important; }
+.tile:nth-child(4) { border-top-color: var(--pastel-blush) !important; }
+.tile .v { font-family: var(--sans); font-size: 2rem; font-weight: 650; letter-spacing: -.02em; line-height: 1.1; }
+.tile .l { font-family: var(--sans); font-size: .8125rem; line-height: 1.45; color: var(--ink-2); margin-top: 6px; }
+.tile .l b { color: var(--ink); font-weight: 600; }
+.tldr { background: var(--tint-aqua); border: 1px solid transparent; border-left: 4px solid var(--pastel-aqua); border-radius: 12px; padding: 20px 24px 8px; box-shadow: var(--shadow); }
+.tldr h3 { margin: 0 0 10px; font-size: 1.15rem; font-family: var(--sans); font-weight: 650; letter-spacing: 0; }
+.tldr ol { padding-left: 1.2em; font-size: 1.05rem; }
+.prose .toc { font-family: var(--sans); font-size: .9rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 20px; padding: 0; list-style: none; counter-reset: toc; margin-top: 28px; }
+.prose .toc li { counter-increment: toc; margin: 0; }
+.toc a { display: flex; gap: 10px; padding: 7px 0; border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.toc a::before { content: counter(toc, decimal-leading-zero); color: var(--muted); font-variant-numeric: tabular-nums; }
+.toc a:hover { color: var(--accent); }
+
+/* ---------- body-model gallery ---------- */
+.models { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 28px auto 8px; }
+.model { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.model:nth-child(1) { border-top: 4px solid var(--pastel-blue); }
+.model:nth-child(2) { border-top: 4px solid var(--pastel-lavender); }
+.model:nth-child(3) { border-top: 4px solid var(--pastel-aqua); }
+.model:nth-child(4) { border-top: 4px solid var(--pastel-slate); }
+.model:nth-child(5) { border-top: 4px solid var(--pastel-blue); grid-column: 1 / -1; }
+.model-img { display: block; position: relative; overflow: hidden; background: var(--plate); aspect-ratio: 16 / 8; border-bottom: 1px solid var(--rule); }
+.model:nth-child(5) .model-img { aspect-ratio: 16 / 5; }
+.model-img img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: contain; }
+.model-body { padding: 14px 18px 16px; font-family: var(--sans); font-size: .875rem; line-height: 1.5; color: var(--ink-2); }
+.model-body h4 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; font-family: var(--sans); font-size: 1.05rem; font-weight: 700; letter-spacing: 0; color: var(--ink); }
+.model-body h4 span { font-size: .75rem; font-weight: 600; color: var(--muted); }
+.model-body p { margin: 0; }
+
+/* ---------- data tables ---------- */
+.tscroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; font-family: var(--sans); font-size: .84rem; line-height: 1.45; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+thead th { font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); background: var(--pastel-blue); white-space: nowrap; }
+:root[data-theme="dark"] thead th { background: var(--tint-blue); }
+tbody tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td .nm { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.tnote { font-family: var(--sans); font-size: .8rem; color: var(--muted); margin-top: 10px; }
+
+/* ---------- callouts & cards ---------- */
+.callout { background: var(--tint-blue); border: 1px solid transparent; border-radius: 12px; padding: 18px 22px 6px; box-shadow: var(--shadow); }
+.callout h4 { margin: 0 0 8px; font-family: var(--sans); font-size: .95rem; font-weight: 650; letter-spacing: 0; }
+.callout ul { font-size: 1.02rem; }
+.cards { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); }
+.cards.two { grid-template-columns: repeat(2, 1fr); }
+.cards.five { grid-template-columns: repeat(5, 1fr); }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; font-family: var(--sans); font-size: .875rem; line-height: 1.5; color: var(--ink-2); box-shadow: var(--shadow); }
+.cards > .card:nth-child(4n+1) { border-top: 4px solid var(--pastel-blue); }
+.cards > .card:nth-child(4n+2) { border-top: 4px solid var(--pastel-lavender); }
+.cards > .card:nth-child(4n+3) { border-top: 4px solid var(--pastel-aqua); }
+.cards > .card:nth-child(4n+4) { border-top: 4px solid var(--pastel-slate); }
+.card h4 { font-family: var(--sans); font-size: 1rem; font-weight: 650; margin: 0 0 6px; color: var(--ink); letter-spacing: 0; }
+.card .tag { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.card p { margin: 0 0 8px; }
+.card ul { margin: 0; padding-left: 1.1em; }
+.card li { margin-bottom: 4px; }
+.card a { font-weight: 600; }
+.metric-card .abbr { font-size: 1.5rem; font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+.metric-card .dir { display: inline-block; margin-left: 6px; font-size: .75rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--tint-aqua); color: var(--ink); vertical-align: 4px; }
+.metric-card .use { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+.methods { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px auto 20px; font-family: var(--sans); }
+.methods span { font-size: .78rem; padding: 3px 9px; border-radius: 999px; background: var(--surface); border: 1px solid var(--rule); color: var(--ink-2); }
+.methods.single span { background: var(--pastel-blue); border-color: transparent; color: #2f3640; }
+.methods.multi span { background: var(--pastel-lavender); border-color: transparent; color: #2f3640; }
+.methods .lbl { background: none !important; border: 0; padding-left: 0; font-weight: 700; color: var(--ink); }
+.dir-list { counter-reset: d; list-style: none; padding: 0 !important; }
+.prose .dir-list > li { counter-increment: d; position: relative; padding: 16px 0 10px 52px; border-top: 1px solid var(--rule); margin: 0; }
+.dir-list > li::before { content: counter(d, decimal-leading-zero); position: absolute; left: 0; top: 16px; font-family: var(--sans); font-weight: 700; font-size: .9rem; color: var(--accent); }
+.dir-list h4 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 600; }
+.dir-list p { margin: 0 0 6px; font-size: 1.02rem; }
+
+/* ---------- dot-plot charts ---------- */
+.chart { --lw: 136px; --gap: 14px; position: relative; font-family: var(--sans); background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 20px 22px 16px; box-shadow: var(--shadow); }
+.chart-title { font-size: 1.05rem; font-weight: 650; margin: 0 0 2px; color: var(--ink); }
+.chart-sub { font-size: .84rem; color: var(--ink-2); margin: 0 0 14px; max-width: none; }
+.chart-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-bottom: 8px; }
+.seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--tint-blue); border: 1px solid transparent; }
+.seg button { font: inherit; font-size: .8rem; font-weight: 600; border: 0; background: none; color: var(--ink-2); padding: 6px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--rule-strong); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 0; padding: 0; font-size: .8rem; color: var(--ink-2); }
+.legend li { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+.sw { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+.chart-hint { font-size: .78rem; color: var(--muted); margin: 0 0 6px; max-width: none; }
+.plot { position: relative; padding-right: 18px; }
+.grid { position: absolute; top: 0; bottom: 26px; left: calc(var(--lw) + var(--gap)); right: 18px; pointer-events: none; }
+.grid span { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+.grp, .row { display: grid; grid-template-columns: var(--lw) 1fr; column-gap: var(--gap); align-items: center; position: relative; }
+.grp { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 12px 0 4px; }
+.grp > div { display: flex; align-items: center; gap: 6px; grid-column: 1 / -1; }
+.row { height: 28px; }
+.rl { font-size: .8rem; color: var(--ink); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tr { position: relative; height: 100%; }
+.tr::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--grid); opacity: .6; }
+.dot { position: absolute; top: 50%; width: 28px; height: 28px; margin: 0; padding: 0; border: 0; background: none; transform: translate(-50%, -50%); cursor: pointer; border-radius: 50%; z-index: 1; }
+.dot::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--surface); transition: transform .12s ease; }
+.dot:hover::before, .dot:focus-visible::before, .dot.on::before { transform: scale(1.3); }
+.dot:focus-visible { outline-offset: -4px; }
+.val { position: absolute; top: 50%; transform: translate(12px, -50%); font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; pointer-events: none; }
+.val.l { transform: translate(calc(-100% - 12px), -50%); }
+.nr { position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: .72rem; color: var(--muted); font-style: italic; background: var(--surface); padding-right: 6px; }
+.row.axis { height: 26px; }
+.row.axis .tr::before { display: none; }
+.row.axis .tr span { position: absolute; top: 6px; transform: translateX(-50%); font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tip { position: absolute; z-index: 5; min-width: 200px; max-width: 280px; background: var(--surface); color: var(--ink); border: 1px solid var(--rule-strong); border-radius: 10px; padding: 10px 12px; font-size: .78rem; line-height: 1.45; box-shadow: 0 8px 28px rgba(0,0,0,.14); pointer-events: none; }
+.tip .t-h { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: .85rem; margin-bottom: 2px; }
+.tip .t-g { color: var(--muted); margin-bottom: 6px; }
+.tip dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 10px; margin: 0; }
+.tip dt { color: var(--ink-2); }
+.tip dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.tip dd.cur { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.tip .t-d { color: var(--muted); margin-top: 6px; border-top: 1px solid var(--rule); padding-top: 6px; }
+.chart details { margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.chart summary { cursor: pointer; font-size: .82rem; font-weight: 600; color: var(--ink-2); }
+.chart details .tscroll { margin-top: 10px; box-shadow: none; }
+.chart details table { font-size: .78rem; }
+.chart details th, .chart details td { padding: 7px 10px; }
+.chart-note { font-size: .78rem; color: var(--muted); margin: 10px 0 0; max-width: none; }
+
+/* ---------- citation ---------- */
+.cite { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); font-family: var(--sans); }
+.cite p { font-size: .92rem; line-height: 1.55; margin: 0 0 14px; }
+.cite pre { margin: 0; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; font-family: var(--mono); font-size: .78rem; line-height: 1.55; overflow-x: auto; white-space: pre; color: var(--ink); }
+.cite-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+footer { margin-top: 80px; border-top: 1px solid var(--rule); padding: 28px 0 56px; font-family: var(--sans); font-size: .82rem; color: var(--muted); line-height: 1.6; }
+footer p { max-width: 760px; margin: 0 0 8px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .cards, .cards.five { grid-template-columns: repeat(2, 1fr); }
+  .prose .toc { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px) {
+  body { font-size: 1.0625rem; }
+  .wrap { padding: 0 16px; }
+  .topbar-in { padding: 8px 16px; gap: 10px; }
+  .topbar .btn-primary { display: none; }
+  .hero { padding-top: 36px; }
+  h2 { margin-top: 56px; }
+  .tiles { gap: 10px; }
+  .tile { padding: 14px; }
+  .tile .v { font-size: 1.6rem; }
+  .cards, .cards.two, .cards.five { grid-template-columns: 1fr; }
+  .prose .toc { grid-template-columns: 1fr; }
+  .models { grid-template-columns: 1fr; }
+  .model:nth-child(5) .model-img { aspect-ratio: 16 / 7; }
+  .plate { padding: 8px; border-radius: 10px; }
+  .chart { --lw: 104px; --gap: 10px; padding: 16px 14px 12px; }
+  .rl { font-size: .74rem; }
+  .callout, .tldr { padding-left: 18px; padding-right: 18px; }
+  .prose .dir-list > li { padding-left: 40px; }
+}
+@media print {
+  .topbar, .progress, .cta, .cite-actions, .seg { display: none !important; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top">3D Virtual Try-On <span>· review notes</span></a>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch between light and dark theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <a class="btn btn-primary" href="https://link.springer.com/article/10.1007/s11042-026-21423-2" target="_blank" rel="noopener">Read the paper</a>
+  </div>
+</header>
+
+<main class="wrap prose" id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <span class="kicker">Research summary · Multimedia Tools and Applications</span>
+    <h1>Dressing the <em>digital human</em>: a tour of 3D virtual try-on</h1>
+    <p class="dek">Our new open-access review maps the whole 3D virtual try-on pipeline: how digital garments are made, how a shopper's body becomes an avatar, and how the two are fitted together. It also compares the methods that do each step.</p>
+    <div class="byline">
+      <span><strong>Yi Wei Fung, King Hann Lim &amp; Jonathan Then Sien Phang</strong></span>
+      <span>Curtin University Malaysia</span>
+      <span>Published 12 April 2026</span>
+      <span>~12 min read</span>
+      <span class="badge">Open access · CC BY 4.0</span>
+    </div>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://link.springer.com/article/10.1007/s11042-026-21423-2" target="_blank" rel="noopener">Read the full paper</a>
+      <a class="btn btn-ghost" href="https://link.springer.com/content/pdf/10.1007/s11042-026-21423-2.pdf" target="_blank" rel="noopener">Download PDF</a>
+      <a class="btn btn-ghost" href="#cite">Cite this work</a>
+    </div>
+  </section>
+
+  <!-- ================= TAKEAWAYS ================= -->
+  <section id="takeaways">
+    <h2>Key takeaways</h2>
+    <div class="tiles wide">
+      <div class="tile"><div class="v">0.985</div><div class="l">Highest try-on <b>SSIM</b>, from <b>H3DVT</b>, which combines the image with depth</div></div>
+      <div class="tile"><div class="v">6.29</div><div class="l">Best try-on <b>FID</b>, from the diffusion-based <b>IDM-VTON</b></div></div>
+      <div class="tile"><div class="v">0.979</div><div class="l">Highest avatar <b>SSIM</b>, from <b>GaussianAvatar</b>, built on 3D Gaussian Splatting</div></div>
+      <div class="tile"><div class="v">~100×</div><div class="l">How much faster <b>data-driven draping</b> runs than physics simulation (about two orders of magnitude)</div></div>
+    </div>
+
+    <div class="tldr">
+      <h3>The short version</h3>
+      <ol>
+        <li><strong>3D try-on has three stages:</strong> make a 3D garment, rebuild the person as a 3D avatar, then fit the garment onto the body.</li>
+        <li><strong>Gaussian splatting is ahead for avatars.</strong> It gives better rendering quality than NeRF or implicit-function methods, especially for moving bodies and clothing, and it renders in real time.</li>
+        <li><strong>Single-layer avatars score higher, but multi-layer avatars are what make garment swapping possible,</strong> because they keep body and clothing as separate meshes.</li>
+        <li><strong>Adding 3D information to image try-on helps.</strong> Image-only methods reach an SSIM of 0.740–0.949; methods that also use 3D geometry reach 0.813–0.985.</li>
+        <li><strong>Diffusion models beat GANs on realism but are slower.</strong> Most try-on research still covers only upper-body garments because that is all the popular datasets contain.</li>
+        <li><strong>The main open problems</strong> are extreme poses, loose clothing, garment sizing, real-time speed and a lack of diversity in the datasets.</li>
+      </ol>
+    </div>
+
+    <ol class="toc">
+      <li><a href="#why-3d">Why 3D?</a></li>
+      <li><a href="#pipeline">The pipeline at a glance</a></li>
+      <li><a href="#garments">Stage 1 · Digital garments</a></li>
+      <li><a href="#avatars">Stage 2 · Human avatars</a></li>
+      <li><a href="#try-on">Stage 3 · Fitting the garment</a></li>
+      <li><a href="#metrics">How quality is measured</a></li>
+      <li><a href="#challenges">Open challenges</a></li>
+      <li><a href="#industry">3D try-on in industry</a></li>
+      <li><a href="#cite">Cite the paper</a></li>
+    </ol>
+  </section>
+
+  <!-- ================= WHY 3D ================= -->
+  <section id="why-3d">
+    <h2>Why 3D?</h2>
+    <p>Virtual try-on (VTO) lets a shopper see how an outfit looks on them without a fitting room, and without telling a customer-service agent their measurements. Virtual fitting rooms are already offered by brands such as GAP and UNIQLO.</p>
+    <p>Most try-on you see online today is <strong>2D</strong>: a generative model blends a photo of a person with a photo of a garment. It is fast and cheap, but it only approximates the shape of the body, so it says little about how a garment actually fits.</p>
+    <p><strong>3D</strong> try-on builds a real digital body and a real digital garment, then fits one onto the other. That makes it possible to view the outfit from the front, back and sides, to choose a size, and to mix and match items. Earlier surveys covered 2D try-on or avatar modelling separately. Our review covers the whole 3D pipeline, including how the garment and the body interact.</p>
+  </section>
+
+  <!-- ================= PIPELINE ================= -->
+  <section id="pipeline">
+    <h2>The pipeline at a glance</h2>
+    <p>Fig. 1 shows how we organise the field. Every 3D VTO system we reviewed combines three parts: (a) generating a 3D garment, (b) reconstructing the person as a 3D avatar, and (c) transforming the garment to fit that body. All three rest on 3D capture and a parametric body model, which are covered below.</p>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig01.webp" target="_blank" rel="noopener">
+          <img src="images/fig01.webp" width="1442" height="764" alt="The 3D virtual try-on pipeline from the review: (a) 3D garment generation, (b) 3D human avatar reconstruction and (c) body-garment transformation." decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 1</span> The 3D virtual try-on pipeline covered in the review: (a) 3D garment generation, (b) 3D human avatar reconstruction and (c) body–garment transformation.</figcaption>
+    </figure>
+
+    <h3>Capturing people and clothes in 3D</h3>
+    <p>Three sensing methods underpin 3D capture. <strong>Time-of-flight</strong> cameras time how long reflected near-infrared light takes to return to each pixel. <strong>Stereo</strong> cameras match features between two slightly offset views and triangulate. <strong>Structured-light</strong> cameras project an infrared pattern and measure how it distorts, which helps on surfaces with little texture. The data is usually stored as point clouds or RGB-D images because they keep the raw geometry; voxels and meshes are derived from those.</p>
+
+    <h3>The body models everything relies on</h3>
+    <p>Almost every method relies on a parametric body model: a template body whose shape and pose are controlled by a small set of parameters. Virtual try-on needs a body that deforms naturally with the user's shape and pose, and these models provide it. Their shape parameters can even be matched to real bust, waist and hip measurements, which matters for fit. The review covers five:</p>
+
+    <div class="models wide">
+      <article class="model">
+        <a class="model-img" href="https://ai.stanford.edu/~drago/Projects/scape/scape.html" target="_blank" rel="noopener"><img src="images/scape.gif" width="1203" height="348" alt="SCAPE completing full body meshes from sparse motion-capture markers." loading="lazy" decoding="async"></a>
+        <div class="model-body"><h4>SCAPE <span>2005</span></h4><p>The first model to treat body shape and pose separately. It represents body deformation as deformations of the mesh's triangles.</p></div>
+      </article>
+      <article class="model">
+        <a class="model-img" href="https://smpl.is.tue.mpg.de/" target="_blank" rel="noopener"><img src="images/smpl.webp" width="1600" height="496" alt="The SMPL formulation: template mesh, shape blend shapes, pose blend shapes and the final posed body." loading="lazy" decoding="async"></a>
+        <div class="model-body"><h4>SMPL <span>2015</span></h4><p>A vertex-based linear model that splits deformation into shape-dependent and pose-dependent parts and poses the body with linear blend skinning. It is now the research community's default.</p></div>
+      </article>
+      <article class="model">
+        <a class="model-img" href="https://star.is.tue.mpg.de/" target="_blank" rel="noopener"><img src="images/star.webp" width="960" height="720" alt="STAR's sparse, spatially local pose correctives shown on bodies in different poses." loading="lazy" decoding="async"></a>
+        <div class="model-body"><h4>STAR <span>2020</span></h4><p>A drop-in replacement for SMPL. Sparse, local pose correctives let it capture more variety across body types with 80% of SMPL's parameters.</p></div>
+      </article>
+      <article class="model">
+        <a class="model-img" href="https://smpl-x.is.tue.mpg.de/" target="_blank" rel="noopener"><img src="images/smplx.webp" width="1134" height="830" alt="SMPL-X fitted to a photo of a person, capturing hand pose and facial expression." loading="lazy" decoding="async"></a>
+        <div class="model-body"><h4>SMPL-X <span>2019</span></h4><p>Extends SMPL with expressive hands and face by merging the MANO hand model and the FLAME head model, adding joints for the jaw, eyeballs, neck and fingers.</p></div>
+      </article>
+      <article class="model">
+        <a class="model-img" href="https://supr.is.tue.mpg.de/" target="_blank" rel="noopener"><img src="images/supr.webp" width="1600" height="495" alt="The SUPR full-body model alongside its separate head, hand and foot models." loading="lazy" decoding="async"></a>
+        <div class="model-body"><h4>SUPR <span>2022</span></h4><p>Covers the full body including face, hands and feet, and splits it into separate head, hand and foot models so each part can be modelled independently.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= GARMENTS ================= -->
+  <section id="garments">
+    <span class="kicker">Stage 1</span>
+    <h2 style="margin-top:0">Making the digital garment</h2>
+    <p>A digital garment comes from one of two sources: a single photo lifted into 3D, or a garment scanned on a mannequin or a person and collected into a dataset.</p>
+
+    <figure class="mid">
+      <div class="plate">
+        <a href="images/fig02.webp" target="_blank" rel="noopener">
+          <img src="images/fig02.webp" width="1439" height="950" alt="Diagram of two ways to obtain a 3D garment: lifting a 2D garment image to 3D, and reconstructing garments into a 3D dataset." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 2</span> (a) Lifting a 2D garment image into a 3D garment, and (b) reconstructing garments into a 3D garment dataset.</figcaption>
+    </figure>
+
+    <h3>Lifting a 2D photo into 3D</h3>
+    <ul>
+      <li><strong>JFNet</strong> (Xu et al.) takes front and back photos of a garment. It predicts landmarks and part segmentation, estimates the garment's size, deforms a template mesh to match, and takes the texture from the segmented parts.</li>
+      <li><strong>AnchorUDF</strong> uses an unsigned distance field with anchor points, so it can represent open surfaces. That matters because garments, unlike bodies, are not closed shapes.</li>
+      <li><strong>xCloth</strong> needs no template. It predicts layered "peeled" depth and semantic maps, turns them into a dense mesh, and fills in hidden areas of the texture.</li>
+      <li><strong>Chen et al.</strong> pair a generator of pseudo sparse views with a volumetric signed distance field, so the garment looks the same from every angle.</li>
+    </ul>
+
+    <h3>Starting from a 3D garment dataset</h3>
+    <p>Datasets give ready-made garments with rich annotations. These are the five we compared:</p>
+    <div class="wide">
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Dataset</th><th class="num">Year</th><th class="num">Garment models</th><th class="num">Categories</th><th>Captured with</th><th>What it adds</th></tr></thead>
+          <tbody>
+            <tr><td><span class="nm">Deep Fashion3D</span></td><td class="num">2020</td><td class="num">2,078</td><td class="num">10</td><td>Multi-view stereo</td><td>Real garments (563 instances) with multi-view images, 3D feature lines and 3D body pose</td></tr>
+            <tr><td><span class="nm">SIZER</span></td><td class="num">2020</td><td class="num">2,000</td><td class="num">10</td><td>3D scans</td><td>The first dataset of people in different garment sizes: 100 people, sizes S–XL, with SMPL+G registration and body shape under clothing</td></tr>
+            <tr><td><span class="nm">CLOTH3D*</span></td><td class="num">2020</td><td class="num">8,500</td><td class="num">6</td><td>Physics-based simulation</td><td>The first synthetic dataset of clothed human sequences: over 2 million samples, with fabric, topology and self-collision labels</td></tr>
+            <tr><td><span class="nm">ClothesNet*</span></td><td class="num">2023</td><td class="num">4,400</td><td class="num">11</td><td>CGTrader models</td><td>3D boundary lines and keypoints; benchmarks for garment perception and robot manipulation</td></tr>
+            <tr><td><span class="nm">4D-DRESS</span></td><td class="num">2024</td><td class="num">64</td><td class="num">8</td><td>4D scans</td><td>Real outfits in motion: 520 sequences, 78k frames, labels for every vertex, layered outfits</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">* Synthetic, created with graphics engines. Adapted from Table 1 of the paper.</p>
+    </div>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig11.webp" target="_blank" rel="noopener">
+          <img src="images/fig11.webp" width="1442" height="629" alt="Comparison of 3D garment datasets grouped by their main research use: avatar reconstruction, static garment modelling and dynamic garment modelling." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 11</span> Garment datasets grouped by their main use in research: avatar reconstruction, static garment modelling and dynamic garment modelling.</figcaption>
+    </figure>
+
+    <p>Each dataset tends to serve one job. <strong>SIZER</strong> is the usual choice for avatar reconstruction, <strong>CLOTH3D</strong> for training physics-based garment dynamics, and <strong>4D-DRESS</strong> for benchmarking garment reconstruction and simulation. ClothesNet and Deep Fashion3D are rarely used for try-on itself; ClothesNet mostly supports robots that fold, hang and dress clothes. The two works closest to full 3D try-on are <strong>CustomHumans</strong> and <strong>Dress-Me-Up</strong>. They drape garments from SIZER and CLOTH3D respectively onto avatars reconstructed from THuman2.0.</p>
+
+    <div class="callout">
+      <h4>Gaps in the current datasets</h4>
+      <ul>
+        <li><strong>Everyday basics dominate:</strong> T-shirts, hoodies, trousers, skirts and dresses, usually one shirt and one pair of trousers per person. Haute couture, traditional cultural dress and activewear are barely represented.</li>
+        <li><strong>Deep Fashion3D</strong> has too many tops and too few trousers and skirts, and many of its 2,078 models are the same 563 garments in different poses.</li>
+        <li><strong>ClothesNet</strong> is not registered to human bodies or motion. <strong>CLOTH3D</strong> has no RGB images and its people do not look photorealistic.</li>
+        <li><strong>SIZER</strong> scans are all in a relaxed A-pose.</li>
+        <li><strong>4D-DRESS</strong> is the only one with layered outfits in motion, but it is small: 64 outfits from 32 participants (average age 24), including only 4 dresses.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= AVATARS ================= -->
+  <section id="avatars">
+    <span class="kicker">Stage 2</span>
+    <h2 style="margin-top:0">Rebuilding the person as an avatar</h2>
+    <p>To show how clothes fit a particular customer, the system first needs a digital version of that customer, with both the shape of the body and the look of its surface. Methods fall into three families:</p>
+    <div class="cards wide">
+      <div class="card"><span class="tag">Model-based</span><h4>Fit a template body</h4><p>Align a parametric model such as SMPL to a scan or image. Reliable for body shape, but poor at clothing and hair.</p></div>
+      <div class="card"><span class="tag">Model-free</span><h4>Learn the surface directly</h4><p>Estimate which points in 3D space are occupied, using implicit functions, NeRF or 3D Gaussian Splatting. This captures clothing and hair.</p></div>
+      <div class="card"><span class="tag">Hybrid</span><h4>Combine the two</h4><p>A parametric model handles the body, and a model-free method handles the shape and look of clothing and skin.</p></div>
+    </div>
+
+    <figure class="mid">
+      <div class="plate">
+        <a href="images/fig08.webp" target="_blank" rel="noopener">
+          <img src="images/fig08.webp" width="1181" height="662" alt="Side-by-side comparison of a single-layer avatar, where body and garment form one mesh, and a multi-layer avatar with separate body and garment meshes." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 8</span> A single-layer avatar merges body and clothing into one mesh. A multi-layer avatar keeps separate body and garment meshes.</figcaption>
+    </figure>
+
+    <h3>One layer or many?</h3>
+    <p><strong>Single-layer</strong> avatars model only the outer surface, meaning the skin and the outermost clothing. That keeps them simpler and good at capturing wrinkles and folds. Because clothing and body are one surface, though, they cannot handle loose or sliding garments, or a shirt worn under a jacket.</p>
+    <p><strong>Multi-layer</strong> avatars (often written SMPL+G) model the body and each garment separately. That is what lets you move a garment from one body to another, which is the core of try-on. The cost is a harder optimisation problem, and some methods depend on garment templates that struggle with details like pockets and belts.</p>
+    <div class="methods single"><span class="lbl">Single-layer:</span><span>Octopus</span><span>PIFu</span><span>PIFuHD</span><span>Neural Body</span><span>ARAH</span><span>SCANimate</span><span>GTA</span><span>GaussianBody</span><span>GaussianAvatar</span><span>PhysAvatar</span></div>
+    <div class="methods multi"><span class="lbl">Multi-layer:</span><span>BCNet</span><span>ClothWild</span><span>ReEF</span><span>REC-MV</span><span>ClothCap</span><span>TightCap</span><span>DiffAvatar</span><span>CaPhy</span><span>MGN</span><span>Dressing Avatar</span><span>USR</span><span>SCARF</span><span>DELTA</span><span>D3GA</span><span>LayGA</span><span>DeepWrinkles</span><span>GALA</span></div>
+
+    <h3>Implicit functions vs NeRF vs Gaussian splatting</h3>
+    <div class="wide">
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Representation</th><th>How it works</th><th>Strength</th><th>Weakness</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><span class="nm">Implicit function</span></td><td>A neural network (MLP) predicts whether each 3D point is inside the surface, using features aligned to image pixels</td><td>Continuous geometry at any resolution</td><td>Texture quality is limited by feature resolution; memory caps input at 512 × 512</td><td>PIFu, PIFuHD, GTA</td></tr>
+            <tr><td><span class="nm">NeRF</span></td><td>A neural field returns colour and density for every 3D point and renders novel views by volume rendering</td><td>Novel-view synthesis from only a few images</td><td>Slow inference; overfits geometry to texture; noisy; generalises poorly to unseen poses</td><td>SCARF, DELTA, USR</td></tr>
+            <tr><td><span class="nm">3D Gaussian Splatting</span></td><td>Explicit 3D Gaussians (position, opacity, covariance, colour) are optimised directly and drawn by tile-based rasterisation</td><td>Fast training, real-time rendering, and easy to animate with LBS</td><td>Combining it with skinned bodies and moving cloth still needs new methods</td><td>GaussianAvatar, GaussianBody, PhysAvatar, D3GA, LayGA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>How the avatar methods score</h3>
+    <div class="chart wide" id="avaChart"
+      data-title="Avatar reconstruction benchmarks"
+      data-sub="Each dot is one method, grouped by avatar type. Hover or tap a dot for details; the best score in each group is labelled."></div>
+
+    <ul style="margin-top:24px">
+      <li><strong>Gaussian splatting comes out on top.</strong> Among single-layer methods, PhysAvatar has the lowest Chamfer distance (0.55), GaussianBody the highest PSNR (35.66), and GaussianAvatar the best LPIPS (0.015) and SSIM (0.979). Among multi-layer methods, D3GA has the highest PSNR (30.63). All four are Gaussian-based.</li>
+      <li><strong>Multi-layer methods score lower because the task is harder.</strong> They must recover the body underneath, layered garments and skin texture. Their SSIM ranges from 0.672 to 0.977, against 0.943 to 0.979 for single-layer methods. The best multi-layer results come from the mesh-plus-NeRF hybrids SCARF and DELTA (SSIM 0.977, LPIPS 0.024), and the physics-based CaPhy has the lowest Chamfer distance (0.735).</li>
+      <li><strong>Loose clothing defeats both kinds.</strong> Linear blend skinning assumes clothing moves in a straight line with the skeleton. That holds for tight garments, but coats and evening dresses move independently of the body underneath.</li>
+    </ul>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig12.webp" target="_blank" rel="noopener">
+          <img src="images/fig12.webp" width="1440" height="592" alt="Examples of avatar reconstruction failures: artifacts under extreme poses and loose dresses, missing hair after transfer, and a hand stuck inside a pocket." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 12</span> Typical avatar failures: (a–b) artifacts when reposing into extreme poses or a loose dress, (c) hair missing after transfer because it was not seen in training, (d) a hand stuck in a pocket after a segmentation error.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ================= TRY-ON ================= -->
+  <section id="try-on">
+    <span class="kicker">Stage 3</span>
+    <h2 style="margin-top:0">Putting the garment on the body</h2>
+    <p>Body–garment transformation moves a garment onto a new person while keeping the interaction between cloth and body believable. The garment can come from a clean product photo or from a photo of someone else wearing it.</p>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig09.webp" target="_blank" rel="noopener">
+          <img src="images/fig09.webp" width="1442" height="605" alt="Overview of body-garment transformation showing image-based try-on via 2D garment transfer and 3D try-on via draping or depth-based lifting." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 9</span> Body–garment transformation produces either (a) an image-based try-on through 2D garment transfer, or (b) a 3D try-on, by draping a 3D garment over a 3D body or by lifting a 2D try-on into 3D with depth estimation.</figcaption>
+    </figure>
+
+    <h3>Route 1: garment transfer (image-based)</h3>
+    <p>The garment image is warped to fit the person's pose and pasted onto them. Warping usually uses thin-plate splines (TPS) or appearance flow. There are three variants:</p>
+    <ul>
+      <li><strong>Pure 2D warping.</strong> CAGAN was the first image-based VTO model. VITON made it practical by needing only the target garment image. GP-VTON, USC-PFN, GC-VTON and CS-VITON improved the warping. Diffusion-based OOTDiffusion and IDM-VTON improved garment fidelity, Wear-Any-Way added style controls such as tucking in a shirt or rolling up sleeves, and ViViD extended try-on to video.</li>
+      <li><strong>3D-to-2D warping.</strong> The garment is deformed on an estimated SMPL body and rendered back into the image. Examples are CloTH-VTON and Zakharkin et al.'s point-cloud method.</li>
+      <li><strong>2D-to-3D lifting.</strong> A depth network turns the try-on image into a textured 3D mesh. Examples are M3D-VTON, VTON-MC, H3DVT and HUMOD.</li>
+    </ul>
+
+    <h3>Route 2: garment draping (3D)</h3>
+    <p>A 3D garment is fitted onto an avatar of any shape and pose. Pix2Surf and Cloth2Tex build textured garments from photos, and DRAPE, TailorNet, DIG and Neural-ABC learn how garments deform. Draping is done in one of two ways:</p>
+    <div class="cards two mid">
+      <div class="card"><span class="tag">Physics-based</span><h4>Simulate the cloth</h4><p>The cloth is a network of connected particles acted on by gravity, friction, wind and collisions.</p><p><strong>More realistic, but computationally expensive.</strong></p></div>
+      <div class="card"><span class="tag">Data-driven</span><h4>Learn the deformation</h4><p>A model learns how a garment deforms as a function of body shape and pose. Most methods train one model per garment template.</p><p><strong>About 100× faster, but less realistic.</strong></p></div>
+    </div>
+    <p style="margin-top:20px">Both routes rely on generative models. <strong>GANs</strong> train a generator to fool a discriminator and produce an image in a single pass. <strong>Diffusion models</strong> learn to reverse a gradual noising process, building the image step by step. They produce better images, but each image takes many denoising steps.</p>
+
+    <h3>How the try-on methods score</h3>
+    <div class="chart wide" id="vtoChart"
+      data-title="Garment transfer and draping benchmarks"
+      data-sub="Each dot is one method, grouped by how it combines image and 3D information. Hover or tap a dot for details; the best score in each group is labelled."></div>
+
+    <ul style="margin-top:24px">
+      <li><strong>Category leaders:</strong> IDM-VTON has the best FID (6.29), HUMOD the best LPIPS (0.030), and H3DVT the highest SSIM (0.985).</li>
+      <li><strong>Adding 3D improves results.</strong> Image-only methods reach an SSIM of 0.740–0.949, and methods that add 3D geometry reach 0.813–0.985. Hybrids such as HUMOD and H3DVT warp more naturally and blend textures better.</li>
+      <li><strong>Diffusion beats GANs on realism</strong> (lower FID) and handles occlusion and inpainting better. The trade-off is speed: many denoising steps mean more latency and memory than a single-pass GAN.</li>
+      <li><strong>Upper-body bias.</strong> VITON, VITON-HD, VVT and MPV-3D contain front-facing, half-body photos with upper-body garments, so most methods only do tops. Only models trained on DressCode handle lower-body garments and full-length dresses.</li>
+    </ul>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig13.webp" target="_blank" rel="noopener">
+          <img src="images/fig13.webp" width="1439" height="435" alt="Examples of 2D virtual try-on failures: texture distortion, a missing sleeve rendering error, and warping errors caused by wrong human parsing." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 13</span> Where 2D try-on fails: (a) texture distortion when the pose hides part of the body, (b) rendering errors from an incomplete garment, (c) bad warping after a body-parsing error.</figcaption>
+    </figure>
+
+    <p>Diffusion models have a specific weakness: they struggle with <strong>small logos and printed text</strong>, because inpainting in latent space loses small, precise details. They can also repaint parts of the original person, such as muscles, tattoos and accessories. Methods that use a 3D body prior have problems of their own. A wrong body estimate in a complex pose misaligns the clothing, and with only one photo there is nothing to show what the back and sides should look like.</p>
+
+    <figure class="wide">
+      <div class="plate">
+        <a href="images/fig16.webp" target="_blank" rel="noopener">
+          <img src="images/fig16.webp" width="1442" height="524" alt="Examples of 3D garment draping failures: self-collision at the armpit, hair transferred with a garment, penetration on a larger body, and missing texture under clothing." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 16</span> Draping failures in 3D try-on: (a) the body mesh colliding with itself, (b) hair carried over with the garment because of a segmentation error, (c) a tight garment poking through when put on a larger body, (d) no skin texture where the old clothing was removed.</figcaption>
+    </figure>
+
+    <p>Draping also tends to give <strong>over-smoothed surfaces and unnatural wrinkles</strong>, because parametric models encode garments with only a few parameters. And current methods drape a close-fitting result with <strong>no real size adjustment</strong>. GALA changes garment size through the SMPL-X shape parameters, but the garment just follows the body. Dressing Avatar edits the length of the garment template, but only for the outermost layer. Adding a garment-sizing algorithm could make it possible to show oversized tops or baggy trousers.</p>
+  </section>
+
+  <!-- ================= METRICS ================= -->
+  <section id="metrics">
+    <h2>How quality is measured</h2>
+    <p>Five metrics come up again and again. Chamfer distance checks 3D geometry. The others compare images, which also works for avatars because they are usually rendered to images and compared with the input photos.</p>
+    <div class="cards five wide">
+      <div class="card metric-card"><div><span class="abbr">CD</span><span class="dir">↓ lower</span></div><p>Chamfer distance: the average gap between the reconstructed point cloud and the ground-truth point cloud.</p><div class="use">3D · avatars</div></div>
+      <div class="card metric-card"><div><span class="abbr">LPIPS</span><span class="dir">↓ lower</span></div><p>Learned perceptual similarity: how different two images look, compared through deep CNN features.</p><div class="use">2D · avatars &amp; try-on</div></div>
+      <div class="card metric-card"><div><span class="abbr">SSIM</span><span class="dir">↑ higher</span></div><p>Structural similarity of brightness, contrast and structure, from 0 to 1, where 1 means identical.</p><div class="use">2D · avatars &amp; try-on</div></div>
+      <div class="card metric-card"><div><span class="abbr">PSNR</span><span class="dir">↑ higher</span></div><p>Peak signal-to-noise ratio in dB: how much distortion there is at the pixel level compared with the ground truth.</p><div class="use">2D · avatars</div></div>
+      <div class="card metric-card"><div><span class="abbr">FID</span><span class="dir">↓ lower</span></div><p>Fréchet Inception distance: how close generated images are to real ones, judged by Inception-network features.</p><div class="use">2D · try-on</div></div>
+    </div>
+    <p style="margin-top:20px">Quantitative evaluation of 3D draping is still not standardised; most papers show qualitative results. Besides image metrics and geometry measures such as CD and IoU, we suggest the <strong>Hausdorff distance</strong> for garment surface error, and <strong>collision counts and interpenetration ratio</strong> for how the body and cloth interact.</p>
+  </section>
+
+  <!-- ================= CHALLENGES ================= -->
+  <section id="challenges">
+    <h2>Where 3D try-on still breaks, and what comes next</h2>
+    <p>Most failures fall into three groups:</p>
+    <div class="cards wide">
+      <div class="card"><span class="tag">Failure family</span><h4>Pose-induced errors</h4><p>Extreme or unusual poses missing from the training data, made worse by occlusion, missing depth and inaccurate pose estimates.</p></div>
+      <div class="card"><span class="tag">Failure family</span><h4>Texture artifacts</h4><p>Incomplete or distorted rendering in try-on images and meshes, often triggered by complex poses.</p></div>
+      <div class="card"><span class="tag">Failure family</span><h4>Sizing mismatches</h4><p>A smaller garment on a larger body leads to collisions and poke-through. Noisy raw scans also cause simulation errors.</p></div>
+    </div>
+    <p style="margin-top:24px">We trace these failures to four root causes, plus practical hurdles, and suggest a research direction for each:</p>
+    <ol class="dir-list">
+      <li><h4>Model architecture</h4><p>GANs are fast but unstable in training, prone to mode collapse, and leave visible texture bleeding where the garment meets the person. Diffusion models generalise better but are slow and harder to control. A <strong>hybrid GAN–diffusion pipeline</strong>, sped up by distillation or consistency models, could get the best of both. Multimodal conditioning could keep skin tone and accessories intact during inpainting.</p></li>
+      <li><h4>Network training</h4><p>Poorly weighted losses cause predictable failures. Weak pose priors cause depth ambiguity, plain L2 loss blurs detail, and light interpenetration penalties let cloth pass through the body. Promising fixes are <strong>keypoint reprojection loss</strong>, <strong>physics-aware regularisation</strong>, <strong>adaptive loss weighting</strong>, temporal consistency for texture, and texture-inpainting losses for skin revealed after draping.</p></li>
+      <li><h4>Dataset diversity</h4><p>Most samples show adult Caucasian women in Western clothing, with few people from Asian or African backgrounds and few non-basic garments. Future benchmarks should cover the <strong>full range of skin tones and garment styles</strong>, all of upper, lower and full-body outfits, and cross-category swaps such as a T-shirt onto someone wearing a long dress. Showing different garments in <strong>identical poses</strong> would help separate pose from appearance.</p></li>
+      <li><h4>Real-time rendering</h4><p>Tracking, draping, collision checks and rendering on a single GPU is still too much. Physics simulation is too slow for real time. Data-driven draping is about 100× faster but has trouble with fast motion, interpenetration and layered outfits. Gaussian splatting is fast but needs new ways to work with skinned bodies and moving cloth. <strong>Knowledge distillation and model compression</strong> can cut model size and inference time.</p></li>
+      <li><h4>Practical deployment</h4><p><strong>AR</strong> is the most practical route to live fitting, through phones today and touchscreens or smart mirrors later, with gesture and voice control. Foundation models such as GPT-4 and Stable Diffusion are moving try-on toward <strong>text-guided generative AI</strong>. That calls for fashion-specific vision-language models and interactive fashion assistants for garment editing, cross-modal retrieval and visual question answering.</p></li>
+    </ol>
+  </section>
+
+  <!-- ================= INDUSTRY ================= -->
+  <section id="industry">
+    <h2>3D try-on in industry</h2>
+    <p>To connect the research with real products, we surveyed commercial tools and picked seven representative platforms in three categories:</p>
+    <div class="cards wide">
+      <div class="card"><span class="tag">3D garment generation</span>
+        <ul>
+          <li><a href="https://3dpresso.ai/" target="_blank" rel="noopener">3Dpresso</a> (RECON Labs): turns a one-minute multi-angle video into a 3D garment model.</li>
+          <li><a href="https://thenewblack.ai/" target="_blank" rel="noopener">The New Black</a>: AI design tools that make try-on-ready garments from product or model photos, with style and fabric-pattern transfer.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="tag">Image-based try-on</span>
+        <ul>
+          <li><a href="https://virtualtryon.net/" target="_blank" rel="noopener">Kolors</a>: upload a full-body photo and see yourself in catalogue or uploaded garments, in a desktop or mobile browser.</li>
+          <li><a href="https://app.klingai.com/global" target="_blank" rel="noopener">KlingAI</a>: generates virtual models for e-commerce with control over hairstyle, pose and background; keeps garment details (SKU) intact and can turn results into video.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="tag">3D try-on and avatars</span>
+        <ul>
+          <li><a href="https://avatarsdk.com/" target="_blank" rel="noopener">Avatar SDK</a>: rigged, animation-ready avatars from a single selfie.</li>
+          <li><a href="https://avaturn.me/" target="_blank" rel="noopener">Avaturn</a>: avatars from three selfies, 10,000+ variations, exportable to Blender and Unreal Engine.</li>
+          <li><a href="https://www.reactivereality.com/" target="_blank" rel="noopener">Reactive Reality</a>: PICTOFiT captures garments by photogrammetry and builds digital twins of shoppers from a selfie. Used by Microsoft, Digital2Go and Shopify.</li>
+        </ul>
+      </div>
+    </div>
+    <figure class="mid">
+      <div class="plate">
+        <a href="images/fig19.webp" target="_blank" rel="noopener">
+          <img src="images/fig19.webp" width="1440" height="933" alt="Screenshots of commercial 3D virtual try-on applications from Avatar SDK, Avaturn and Reactive Reality." loading="lazy" decoding="async">
+        </a>
+      </div>
+      <figcaption><span class="fig-n">Fig. 19</span> Commercial 3D virtual try-on from Avatar SDK, Avaturn and Reactive Reality.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ================= CONCLUSION ================= -->
+  <section id="conclusion">
+    <h2>The takeaway</h2>
+    <p>2D try-on dominates commercial platforms today because it is fast and cheap to run. Research, however, has moved toward <strong>3D</strong>, driven by demand for customisable avatars and realistic, interactive visuals. Across the field, diffusion models are taking over from GANs, and combining images with depth gives clearly better try-on results: LPIPS of 0.030–0.046 and SSIM of 0.830–0.985, better than image-only methods.</p>
+    <p>The hardest problems are still open: accurate full-body draping, datasets with extreme poses, and garment animation that does not depend on predefined motion sequences. As generative AI matures, we expect it to become part of how clothes are designed, produced and sold.</p>
+    <p>If you work on digital fashion, 3D humans or try-on, we hope the review is a useful map. The full paper has every table, all 166 references and much more detail.</p>
+  </section>
+
+  <!-- ================= CITE ================= -->
+  <section id="cite">
+    <h2>Cite the paper</h2>
+    <div class="cite mid">
+      <p>Fung, Y. W., Lim, K. H., &amp; Phang, J. T. S. (2026). Review on three-dimensional clothing modelling and digital human reconstruction for virtual try-on applications. <em>Multimedia Tools and Applications</em>, 85, 359. <a href="https://doi.org/10.1007/s11042-026-21423-2" target="_blank" rel="noopener">https://doi.org/10.1007/s11042-026-21423-2</a></p>
+<pre id="bibtex">@article{fung2026review,
+  title   = {Review on three-dimensional clothing modelling and digital
+             human reconstruction for virtual try-on applications},
+  author  = {Fung, Yi Wei and Lim, King Hann and Phang, Jonathan Then Sien},
+  journal = {Multimedia Tools and Applications},
+  volume  = {85},
+  pages   = {359},
+  year    = {2026},
+  doi     = {10.1007/s11042-026-21423-2}
+}</pre>
+      <div class="cite-actions">
+        <button class="btn btn-ghost" type="button" id="copyBib">Copy BibTeX</button>
+        <a class="btn btn-ghost" href="https://link.springer.com/content/pdf/10.1007/s11042-026-21423-2.pdf" target="_blank" rel="noopener">Download PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>This post summarises Fung, Lim &amp; Phang (2026), published open access in <em>Multimedia Tools and Applications</em> under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative Commons Attribution 4.0 International License</a>. Figures are reproduced from the article without changes. Tables and charts are adapted from its Tables 1, 2, 4 and 5. Some figures include examples from the works cited in the article.</p>
+    <p>Body-model images belong to their authors: SCAPE (Anguelov et al.) from its Stanford project page; SMPL (Loper et al.) via the Meshcapade wiki; STAR and SUPR (Osman et al.) and SMPL-X (Pavlakos et al.) from the authors' GitHub repositories. Each image links to its project page.</p>
+    <p>Benchmark scores are as reported by each method's authors on their own evaluation sets, so compare them with care.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = localStorage.getItem('vto-theme-v2'); } catch (e) {}
+  /* Light pastel by default; dark only if the reader chose it with the toggle. */
+  root.setAttribute('data-theme', stored === 'dark' ? 'dark' : 'light');
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('vto-theme-v2', next); } catch (e) {}
+  });
+
+  /* ---------- reading progress ---------- */
+  var bar = document.getElementById('progress');
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? Math.min(100, (scrollY / h) * 100) : 0) + '%';
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* ---------- copy bibtex ---------- */
+  var copyBtn = document.getElementById('copyBib');
+  copyBtn.addEventListener('click', function () {
+    var text = document.getElementById('bibtex').textContent;
+    function done() { copyBtn.textContent = 'Copied'; setTimeout(function () { copyBtn.textContent = 'Copy BibTeX'; }, 1600); }
+    try {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } catch (e) { fallback(); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('bibtex'));
+      var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      try { document.execCommand('copy'); done(); } catch (e) {}
+    }
+  });
+
+  /* ---------- data (from the paper's Tables 4 and 5) ---------- */
+  var INPUT = { S: 'Single image', M: 'Multi-view images', V: '2D video', 'V+': '3D scan', 'S,V': 'Single image or video' };
+  var AVA = [
+    { m: 'PIFu', g: 'single', inp: 'M', body: '—', tr: 'RenderPeople', ev: 'RenderPeople', cd: 1.706 },
+    { m: 'PIFuHD', g: 'single', inp: 'S', body: '—', tr: 'RenderPeople', ev: 'RenderPeople', cd: 1.946 },
+    { m: 'Neural Body', g: 'single', inp: 'V', body: 'SMPL', tr: 'ZJU-MoCap', ev: 'ZJU-MoCap', lpips: 0.033, ssim: 0.943, psnr: 24.94 },
+    { m: 'ARAH', g: 'single', inp: 'V', body: 'SMPL', tr: 'ZJU-MoCap', ev: 'ZJU-MoCap', cd: 1.120, lpips: 0.055, ssim: 0.957, psnr: 28.60 },
+    { m: 'GTA', g: 'single', inp: 'S', body: 'SMPL', tr: 'THuman2.0', ev: 'CAPE', cd: 0.861 },
+    { m: 'PhysAvatar', g: 'single', inp: 'V', body: 'SMPL-X', tr: 'ActorHQ', ev: 'ActorHQ', cd: 0.550, lpips: 0.035, ssim: 0.957, psnr: 30.20 },
+    { m: 'GaussianAvatar', g: 'single', inp: 'V', body: 'SMPL', tr: 'PeopleSnapshot', ev: 'PeopleSnapshot', lpips: 0.015, ssim: 0.979, psnr: 30.98 },
+    { m: 'GaussianBody', g: 'single', inp: 'V', body: 'SMPL', tr: 'PeopleSnapshot', ev: 'PeopleSnapshot', lpips: 0.021, ssim: 0.975, psnr: 35.66 },
+    { m: 'BCNet', g: 'multi', notex: 1, inp: 'S', body: 'SMPL', tr: 'RenderPeople, Axyz', ev: 'Digital Wardrobe', cd: 3.057 },
+    { m: 'ClothWild', g: 'multi', notex: 1, inp: 'S', body: 'SMPL', tr: 'MSCOCO, DeepFashion2', ev: '3DPW', cd: 2.603 },
+    { m: 'ReEF', g: 'multi', notex: 1, inp: 'S,V', body: 'SMPL', tr: 'RenderPeople', ev: 'RenderPeople', cd: 1.903 },
+    { m: 'REC-MV', g: 'multi', notex: 1, inp: 'S,V', body: 'SMPL', tr: '—', ev: 'SelfRecon, RenderPeople', cd: 1.770 },
+    { m: 'TightCap', g: 'multi', notex: 1, inp: 'V+', body: 'SMPL', tr: 'BUFF, CTD', ev: 'FAUST', ssim: 0.672 },
+    { m: 'DiffAvatar', g: 'multi', notex: 1, inp: 'V+', body: 'SMPL', tr: '—', ev: 'Self-collected', cd: 1.311, lpips: 0.133, ssim: 0.842 },
+    { m: 'CaPhy', g: 'multi', notex: 1, inp: 'V+', body: 'SMPL-X', tr: 'CMU Mocap', ev: '—', cd: 0.735, lpips: 0.383 },
+    { m: 'Xiang et al. (2021)', g: 'multi', inp: 'V', body: '—', tr: '—', ev: '—', ssim: 0.882 },
+    { m: 'USR', g: 'multi', inp: 'M', body: 'SMPL', tr: 'ODP', ev: 'ODP', ssim: 0.826, psnr: 24.26 },
+    { m: 'SCARF', g: 'multi', inp: 'V', body: 'SMPL-X', tr: '—', ev: 'PeopleSnapshot', lpips: 0.024, ssim: 0.977, psnr: 30.59 },
+    { m: 'Dressing Avatar', g: 'multi', sizing: 1, inp: 'M', body: '—', tr: '—', ev: '—', ssim: 0.760 },
+    { m: 'DELTA', g: 'multi', inp: 'V', body: 'SMPL-X', tr: 'AGORA', ev: 'PeopleSnapshot', lpips: 0.024, ssim: 0.977, psnr: 30.59 },
+    { m: 'LayGA', g: 'multi', inp: 'V', body: 'SMPL-X', tr: 'AvatarRex, ActorsHQ', ev: '—', lpips: 0.038, ssim: 0.963, psnr: 28.57 },
+    { m: 'D3GA', g: 'multi', inp: 'V+', body: 'SMPL', tr: 'Self-collected', ev: '—', lpips: 0.054, ssim: 0.965, psnr: 30.63 },
+    { m: 'GALA', g: 'multi', sizing: 1, inp: 'V+', body: 'SMPL-X', tr: '—', ev: 'RenderPeople, CAPE', cd: 0.821 }
+  ];
+  var VTO = [
+    { m: 'CAGAN', g: '2d', out: '2D', cov: 'Upper', tr: 'Zalando', ev: 'VITON', fid: 47.34, ssim: 0.740 },
+    { m: 'VITON', g: '2d', out: '2D', cov: 'Upper', tr: 'Zalando', ev: 'VITON', fid: 19.46, lpips: 0.082, ssim: 0.801 },
+    { m: 'GP-VTON', g: '2d', out: '2D', cov: 'Full', tr: 'VITON-HD, DressCode', ev: 'VITON-HD', fid: 9.20, lpips: 0.080, ssim: 0.894 },
+    { m: 'USC-PFN', g: '2d', out: '2D', cov: 'Upper', tr: 'VITON', ev: 'VITON', fid: 10.47, ssim: 0.910 },
+    { m: 'GC-VTON', g: '2d', out: '2D', cov: 'Upper', tr: 'VITON-HD', ev: 'VITON-HD', fid: 7.89, lpips: 0.083, ssim: 0.887 },
+    { m: 'CS-VITON', g: '2d', out: '2D', cov: 'Upper', tr: 'VITON-HD', ev: 'VITON-HD', fid: 9.98, lpips: 0.058, ssim: 0.882 },
+    { m: 'OOTDiffusion', g: '2d', out: '2D', cov: 'Full', tr: 'VITON-HD, DressCode', ev: 'VITON-HD', fid: 8.81, lpips: 0.071, ssim: 0.878 },
+    { m: 'IDM-VTON', g: '2d', out: '2D', cov: 'Upper', tr: 'VITON-HD', ev: 'VITON-HD', fid: 6.29, lpips: 0.102, ssim: 0.870 },
+    { m: 'Wear-Any-Way', g: '2d', out: '2D', cov: 'Full', tr: 'VITON-HD, DressCode', ev: 'VITON-HD', fid: 8.16, lpips: 0.078, ssim: 0.877 },
+    { m: 'ViViD', g: '2d', out: '2D', cov: 'Full', tr: 'VITON-HD, DressCode', ev: 'VVT', lpips: 0.068, ssim: 0.949 },
+    { m: 'CloTH-VTON', g: '2d3d', out: '2D', cov: 'Upper', tr: 'VITON', ev: 'VITON', ssim: 0.813 },
+    { m: 'Zakharkin et al.', g: '2d3d', out: '2D', cov: 'Full', tr: 'CLOTH3D', ev: 'PeopleSnapshot', lpips: 0.031, ssim: 0.950 },
+    { m: 'M3D-VTON', g: 'hyb', out: '3D', cov: 'Upper', tr: 'MPV-3D', ev: 'MPV-3D', fid: 20.04, lpips: 0.046, ssim: 0.880 },
+    { m: 'VTON-MC', g: 'hyb', out: '3D', cov: 'Upper', tr: 'VITON, MPV-3D', ev: 'VITON', fid: 8.93, lpips: 0.031, ssim: 0.890 },
+    { m: 'H3DVT', g: 'hyb', out: '3D', cov: 'Upper', tr: 'VITON, MPV-3D', ev: 'MPV-3D', fid: 15.06, ssim: 0.985 },
+    { m: 'HUMOD', g: 'hyb', out: '3D', cov: 'Upper', tr: 'MPV-3D', ev: 'MPV-3D', fid: 11.14, lpips: 0.030, ssim: 0.960 },
+    { m: 'Cloth2Tex', g: 'hyb', out: '3D', cov: 'Full', tr: 'Self-collected', ev: 'Self-collected', ssim: 0.830 }
+  ];
+
+  var f3 = function (v) { return v.toFixed(3); };
+  var f2 = function (v) { return v.toFixed(2); };
+  var f1 = function (v) { return v.toFixed(1); };
+  var f0 = function (v) { return String(Math.round(v)); };
+
+  var AVA_CFG = {
+    data: AVA,
+    groups: [
+      { key: 'single', label: 'Single-layer avatar', color: '--s1' },
+      { key: 'multi', label: 'Multi-layer avatar', color: '--s2' }
+    ],
+    metrics: [
+      { key: 'ssim', label: 'SSIM', name: 'Structural similarity', dir: 'up', domain: [0.6, 1.0], ticks: [0.6, 0.7, 0.8, 0.9, 1.0], fmt: f3, tick: f1, note: 'Axis starts at 0.6.' },
+      { key: 'psnr', label: 'PSNR', name: 'Peak signal-to-noise ratio (dB)', dir: 'up', domain: [20, 40], ticks: [20, 25, 30, 35, 40], fmt: f2, tick: f0, note: 'Axis starts at 20 dB.' },
+      { key: 'lpips', label: 'LPIPS', name: 'Perceptual distance', dir: 'down', domain: [0, 0.4], ticks: [0, 0.1, 0.2, 0.3, 0.4], fmt: f3, tick: f1 },
+      { key: 'cd', label: 'CD', name: 'Chamfer distance', dir: 'down', domain: [0, 3.5], ticks: [0, 1, 2, 3], fmt: f3, tick: f0 }
+    ],
+    detail: function (d) {
+      var s = (INPUT[d.inp] || d.inp) + ' · body model ' + d.body;
+      if (d.notex) s += ' · no skin texture';
+      if (d.sizing) s += ' · garment sizing';
+      return s + '<br>Train: ' + d.tr + ' · Eval: ' + d.ev;
+    },
+    columns: [
+      ['Method', function (d) { return d.m + (d.notex ? ' #' : '') + (d.sizing ? ' *' : ''); }],
+      ['Type', function (d) { return d.g === 'single' ? 'Single' : 'Multi'; }],
+      ['Input', function (d) { return INPUT[d.inp] || d.inp; }],
+      ['Body model', function (d) { return d.body; }],
+      ['Eval set', function (d) { return d.ev; }],
+      ['CD ↓', 'cd', f3], ['LPIPS ↓', 'lpips', f3], ['SSIM ↑', 'ssim', f3], ['PSNR ↑', 'psnr', f2]
+    ],
+    tableNote: '# Reconstructed without skin texture. * Includes a garment-sizing algorithm. — not reported.'
+  };
+
+  var VTO_CFG = {
+    data: VTO,
+    groups: [
+      { key: '2d', label: 'Image only (2D)', color: '--s1' },
+      { key: '2d3d', label: '2D on a 3D body', color: '--s2' },
+      { key: 'hyb', label: 'Image + depth (2D+3D)', color: '--s3' }
+    ],
+    metrics: [
+      { key: 'ssim', label: 'SSIM', name: 'Structural similarity', dir: 'up', domain: [0.7, 1.0], ticks: [0.7, 0.8, 0.9, 1.0], fmt: f3, tick: f1, note: 'Axis starts at 0.7.' },
+      { key: 'lpips', label: 'LPIPS', name: 'Perceptual distance', dir: 'down', domain: [0, 0.12], ticks: [0, 0.03, 0.06, 0.09, 0.12], fmt: f3, tick: function (v) { return v.toFixed(2); } },
+      { key: 'fid', label: 'FID', name: 'Fréchet Inception distance', dir: 'down', domain: [0, 50], ticks: [0, 10, 20, 30, 40, 50], fmt: f2, tick: f0 }
+    ],
+    detail: function (d) {
+      return d.out + ' output · ' + (d.cov === 'Full' ? 'full-body' : 'upper-body') + ' garments<br>Train: ' + d.tr + ' · Eval: ' + d.ev;
+    },
+    columns: [
+      ['Method', function (d) { return d.m; }],
+      ['Output', function (d) { return d.out; }],
+      ['Strategy', function (d) { return { '2d': '2D', '2d3d': '2D(3D)', 'hyb': '2D+3D' }[d.g]; }],
+      ['Coverage', function (d) { return d.cov; }],
+      ['Eval set', function (d) { return d.ev; }],
+      ['FID ↓', 'fid', f2], ['LPIPS ↓', 'lpips', f3], ['SSIM ↑', 'ssim', f3]
+    ],
+    tableNote: 'Scores were reported on different evaluation sets, mostly VITON, VITON-HD and MPV-3D. — not reported.'
+  };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function dotChart(root, cfg) {
+    var metric = cfg.metrics[0];
+    var gmap = {}; cfg.groups.forEach(function (g) { gmap[g.key] = g; });
+
+    root.innerHTML =
+      '<p class="chart-title">' + esc(root.dataset.title) + '</p>' +
+      '<p class="chart-sub">' + esc(root.dataset.sub) + '</p>' +
+      '<div class="chart-top">' +
+        '<div class="seg" role="group" aria-label="Choose metric">' +
+          cfg.metrics.map(function (m) { return '<button type="button" data-k="' + m.key + '">' + m.label + ' ' + (m.dir === 'up' ? '↑' : '↓') + '</button>'; }).join('') +
+        '</div>' +
+        '<ul class="legend">' + cfg.groups.map(function (g) { return '<li><span class="sw" style="background:var(' + g.color + ')"></span>' + esc(g.label) + '</li>'; }).join('') + '</ul>' +
+      '</div>' +
+      '<p class="chart-hint" aria-live="polite"></p>' +
+      '<div class="plot"></div>' +
+      '<div class="tip" role="tooltip" hidden></div>' +
+      '<details><summary>View as a table</summary><div class="tscroll">' + table(cfg) + '</div><p class="chart-note">' + esc(cfg.tableNote) + '</p></details>';
+
+    var plot = root.querySelector('.plot');
+    var hint = root.querySelector('.chart-hint');
+    var tip = root.querySelector('.tip');
+    var btns = root.querySelectorAll('.seg button');
+
+    function render() {
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === metric.key ? 'true' : 'false'); });
+      var a = metric.domain[0], b = metric.domain[1];
+      var x = function (v) { return Math.max(0, Math.min(100, ((v - a) / (b - a)) * 100)); };
+      hint.textContent = metric.name + ': ' + (metric.dir === 'up' ? 'higher is better.' : 'lower is better.') + (metric.note ? ' ' + metric.note : '');
+
+      var html = '<div class="grid" aria-hidden="true">' + metric.ticks.map(function (t) { return '<span style="left:' + x(t) + '%"></span>'; }).join('') + '</div>';
+      cfg.groups.forEach(function (g) {
+        var rows = cfg.data.filter(function (d) { return d.g === g.key; });
+        var vals = rows.map(function (d) { return d[metric.key]; }).filter(function (v) { return v != null; });
+        var best = vals.length ? (metric.dir === 'up' ? Math.max.apply(null, vals) : Math.min.apply(null, vals)) : null;
+        html += '<div class="grp"><div><span class="sw" style="background:var(' + g.color + ')"></span>' + esc(g.label) + '</div></div>';
+        rows.forEach(function (d) {
+          var v = d[metric.key];
+          var i = cfg.data.indexOf(d);
+          html += '<div class="row"><span class="rl" title="' + esc(d.m) + '">' + esc(d.m) + '</span><div class="tr">';
+          if (v == null) {
+            html += '<span class="nr">not reported</span>';
+          } else {
+            var px = x(v);
+            html += '<button type="button" class="dot" data-i="' + i + '" style="left:' + px + '%;--c:var(' + g.color + ')" aria-label="' + esc(d.m + ', ' + g.label + ', ' + metric.label + ' ' + metric.fmt(v)) + '"></button>';
+            if (v === best) html += '<span class="val' + (px > 74 ? ' l' : '') + '" style="left:' + px + '%">' + metric.fmt(v) + '</span>';
+          }
+          html += '</div></div>';
+        });
+      });
+      html += '<div class="row axis" aria-hidden="true"><span></span><div class="tr">' + metric.ticks.map(function (t) { return '<span style="left:' + x(t) + '%">' + metric.tick(t) + '</span>'; }).join('') + '</div></div>';
+      plot.innerHTML = html;
+      hide();
+    }
+
+    function show(btn) {
+      var d = cfg.data[+btn.dataset.i];
+      var g = gmap[d.g];
+      plot.querySelectorAll('.dot.on').forEach(function (n) { n.classList.remove('on'); });
+      btn.classList.add('on');
+      tip.innerHTML =
+        '<div class="t-h"><span class="sw" style="background:var(' + g.color + ')"></span>' + esc(d.m) + '</div>' +
+        '<div class="t-g">' + esc(g.label) + '</div><dl>' +
+        cfg.metrics.map(function (m) {
+          var v = d[m.key];
+          return '<dt>' + m.label + ' ' + (m.dir === 'up' ? '↑' : '↓') + '</dt><dd' + (m.key === metric.key ? ' class="cur"' : '') + '>' + (v == null ? '—' : m.fmt(v)) + '</dd>';
+        }).join('') + '</dl><div class="t-d">' + cfg.detail(d) + '</div>';
+      tip.hidden = false;
+      var rr = root.getBoundingClientRect(), br = btn.getBoundingClientRect();
+      var tw = tip.offsetWidth, th = tip.offsetHeight;
+      var left = br.left - rr.left + br.width / 2 - tw / 2;
+      left = Math.max(8, Math.min(rr.width - tw - 8, left));
+      var top = br.top - rr.top - th - 6;
+      if (top < 8) top = br.bottom - rr.top + 6;
+      tip.style.left = left + 'px'; tip.style.top = top + 'px';
+    }
+    function hide() {
+      tip.hidden = true;
+      plot.querySelectorAll('.dot.on').forEach(function (n) { n.classList.remove('on'); });
+    }
+
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        metric = cfg.metrics.filter(function (m) { return m.key === b.dataset.k; })[0];
+        render();
+      });
+    });
+    plot.addEventListener('pointerover', function (e) { var t = e.target.closest('.dot'); if (t) show(t); });
+    plot.addEventListener('pointerout', function (e) { var t = e.target.closest('.dot'); if (t && e.pointerType === 'mouse') hide(); });
+    plot.addEventListener('focusin', function (e) { var t = e.target.closest('.dot'); if (t) show(t); });
+    plot.addEventListener('focusout', hide);
+    plot.addEventListener('click', function (e) { var t = e.target.closest('.dot'); if (t) show(t); });
+    document.addEventListener('pointerdown', function (e) { if (!root.contains(e.target) || !e.target.closest('.dot')) hide(); });
+    root.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+    render();
+  }
+
+  function table(cfg) {
+    var head = '<thead><tr>' + cfg.columns.map(function (c) { return '<th' + (typeof c[1] === 'string' ? ' class="num"' : '') + '>' + esc(c[0]) + '</th>'; }).join('') + '</tr></thead>';
+    var body = '<tbody>' + cfg.data.map(function (d) {
+      return '<tr>' + cfg.columns.map(function (c, ci) {
+        if (typeof c[1] === 'string') { var v = d[c[1]]; return '<td class="num">' + (v == null ? '—' : c[2](v)) + '</td>'; }
+        return '<td>' + (ci === 0 ? '<span class="nm">' + esc(c[1](d)) + '</span>' : esc(c[1](d))) + '</td>';
+      }).join('') + '</tr>';
+    }).join('') + '</tbody>';
+    return '<table>' + head + body + '</table>';
+  }
+
+  dotChart(document.getElementById('avaChart'), AVA_CFG);
+  dotChart(document.getElementById('vtoChart'), VTO_CFG);
+})();
+</script>
+</body>
+</html>
