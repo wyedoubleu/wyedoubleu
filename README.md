@@ -17,7 +17,7 @@ I have worked on:
 I'm taking courses on **LLM**, **agentic AI** and **Vision-Language-Action (VLA) models** to explore how they can make virtual try-on systems more interactive and intelligent.
 
 ### 🤝 Let's Collaborate
-I'm open to research collaborations. Feel free to reach out about potential projects or just to chat!
+I'm open to research internship opportunities or research collaborations. Feel free to reach out about potential projects or just to chat!
 
 <!--
 **wyedoubleu/wyedoubleu** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
