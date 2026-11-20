@@ -2,8 +2,6 @@
 
 I'm Yi Wei, you can call me Evie. 😄 a girl figuring life out. 
 
-Please find my personal webpage at https://wyedoubleu.github.io/. 
-
 My research focus on developing an interactive and personalized virtual try-on system. My goals is to enhance online shopping experience by letting consumers to see, explore, and interact with clothing items on their personalize avatar. 
 
 ### 🔬 Research Experience
@@ -20,6 +18,9 @@ I'm taking courses on **LLM**, **agentic AI** and **Vision-Language-Action (VLA)
 
 ### 🤝 Let's Collaborate
 I'm open to research internship opportunities or research collaborations. Feel free to reach out about potential projects or just to chat!
+
+### Personal Page 
+More about me at https://wyedoubleu.github.io/. 
 
 <!--
 **wyedoubleu/wyedoubleu** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
