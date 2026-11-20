@@ -114,6 +114,11 @@ h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
 .xp .where { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
 .xp .what strong { font-weight: 600; }
 .xp .what p { color: var(--muted); max-width: 62ch; }
+.xp .stint { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; max-width: 62ch; }
+.xp .stint span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.xp .what p + .stint, .xp .duties + .stint { margin-top: 14px; }
+.xp .duties { list-style: disc; margin: 4px 0 0; padding-left: 1.2em; max-width: 62ch; color: var(--muted); display: block; }
+.xp .duties li { display: list-item; margin-top: 2px; }
 .units { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-width: 62ch; }
 .units li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; }
 .units li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -171,9 +176,9 @@ footer .wrap { padding-block: 22px 32px; }
 
       <div class="bio">
         <div class="prose">
-          <p>I am a PhD student at <a href="https://www.curtin.edu.au/" target="_blank" rel="noopener">Curtin University</a> , supervised by Prof. Garenth Lim and Jonathan Phang. My research focuses on developing an interactive 3D try-on system that connects users' personalized avatars with online fashion platforms. I'm driven by one question: how do we make digital fashion fit as well as real fashion does? </p>
+          <p>I am a PhD student at <a href="https://www.curtin.edu.au/" target="_blank" rel="noopener">Curtin University</a> , supervised by Prof. Garenth Lim King Hann and Jonathan Phang. My research focuses on developing an interactive 3D try-on system that connects users' personalized avatars with online fashion platforms. I'm driven by one question: how do we make digital fashion fit as well as real fashion does? </p>
 
-          <p>I completed a bachelor degree in Electrical and Electronics Engineering at Curtin University in 2023. Previosly, I was an engineering intern at <a href="https://www.intel.com/content/www/us/en/homepage.html" target="_blank" rel="noopener">Intel</a> working on CPU structural design and silicon validation. In spring 2024, I joined <a href="https://ai3dmotion.com/" target="_blank" rel="noopener">AI3D PLT</a> as a research intern to work on 3D human reconstruction for 2D virtual try-on.</p>
+          <p>I completed a bachelor degree in Electrical and Electronics Engineering at Curtin University in 2023. Previously, I was an engineering intern at <a href="https://www.intel.com/content/www/us/en/homepage.html" target="_blank" rel="noopener">Intel</a> working on CPU structural design and silicon validation. I also joined <a href="https://ai3dmotion.com/" target="_blank" rel="noopener">AI3D PLT</a> as a research intern to work on 3D human reconstruction for 2D virtual try-on.</p>
 
           <p>
             I am seeking research internships and collaborations in human-centric AI and related fields. Feel free to reach out if you are working on a problem and my background could help. 🌱
@@ -206,13 +211,13 @@ footer .wrap { padding-block: 22px 32px; }
 
 <section id="publications">
   <div class="wrap">
-    <h2 style="--mark: var(--mint)"><span>Publications</span></h2>
+    <h2 style="--mark: var(--mint)"><span>Selectd Publications</span></h2>
     <ul class="pubs">
       <li class="pub">
         <div class="pub-text">
           <h3>TextureInner: Recovering the Textured Underlying Body from Clothed 3D Scans</h3>
-          <span class="venue" style="background:var(--peach)">GECOST 2026 · Accepted</span>
-          <p class="summary">A two-stage method that first predicts a sparse inner body beneath the clothing, then reconstructs the full textured underlying body from the clothed scan.</p>
+          <span class="venue" style="background:var(--peach)">GECOST 2027 · Accepted</span>
+          <p class="summary">TL;DR: We recover the textured body beneath clothing from a 3D scan by predicting clothing-to-body displacement using SE(3)-equivariant tightness features and inpainting occluded regions via vertex recoloring. </p>
           <p class="authors"><b>Yi Wei Fung</b>, King Hann Lim, Jonathan Then Sien Phang</p>
           <ul class="chips">
             <li><span class="chip todo">Paper</span></li>
@@ -227,8 +232,8 @@ footer .wrap { padding-block: 22px 32px; }
       <li class="pub">
         <div class="pub-text">
           <h3>PartCloth3D: Point Cloud Clothing Segmentation with Body Part Priors</h3>
-          <span class="venue" style="background:var(--lavender)">Image and Vision Computing · under review</span>
-          <p class="summary">A clothing segmentation framework for 3D body scans. A body part segmentation module refined by graph-cut optimisation supplies body priors, which are fused with point and clothing-class features to label every point.</p>
+          <span class="venue" style="background:var(--lavender)">Image and Vision Computing · Under Review</span>
+          <p class="summary">A clothing segmentation framework design for raw and noisy 3D human scans using predicted body parts as a prior and uses them to correlate the relationship between human points and clothing categories. It can segment background points that SoTA methods 4D-Dress and CloSe-Net do not handle.</p>
           <p class="authors"><b>Yi Wei Fung</b>, King Hann Lim, Jonathan Then Sien Phang</p>
           <ul class="chips">
             <li><span class="chip todo">Paper</span></li>
@@ -244,7 +249,7 @@ footer .wrap { padding-block: 22px 32px; }
         <div class="pub-text">
           <h3>Review on Three-Dimensional Clothing Modelling and Digital Human Reconstruction for Virtual Try-On Applications</h3>
           <span class="venue" style="background:var(--mint)">Multimedia Tools and Applications, 2026 · Open access</span>
-          <p class="summary">A review of the full 3D virtual try-on pipeline, covering garment creation, human avatar reconstruction and fitting garments onto avatars, with a comparison of the methods and datasets used at each stage.</p>
+          <p class="summary">This paper presents a comprehensive review of 3D virtual try-on, covering three core components: 3D garment generation, 3D human avatar reconstruction, and body-garment transformation. It provides an up-to-date research progress, examines the strengths and limitations of current 3D VTO methods, explores practical applications, identifies existing challenges, and suggests promising directions for future research.</p>
           <p class="authors"><b>Yi Wei Fung</b>, King Hann Lim, Jonathan Then Sien Phang</p>
           <ul class="chips">
             <li><a class="chip" style="background:var(--butter)" href="https://link.springer.com/article/10.1007/s11042-026-21423-2" target="_blank" rel="noopener">Paper</a></li>
@@ -265,21 +270,26 @@ footer .wrap { padding-block: 22px 32px; }
         <span class="where">Curtin University</span>
         <div class="what"><strong>Teaching Assistant, 2024–2026</strong>
           <ul class="units">
-            <li><span>Electrical Machines</span><span>Semester 2, 2026</span></li>
-            <li><span>Power Electronics</span><span>Semester 1, 2026</span></li>
-            <li><span>Fundamentals of Programming</span><span>Semester 1, 2025</span></li>
-            <li><span>Electrical Systems</span><span>Semester 2, 2024</span></li>
+            <li><span>ELEN3000 Electrical Machines</span><span>Semester 2, 2026</span></li>
+            <li><span>ETEN3003 Power Electronics</span><span>Semester 1, 2026</span></li>
+            <li><span>COMP1005 Fundamentals of Programming</span><span>Semester 1, 2025</span></li>
+            <li><span>ELEN1000 Electrical Systems</span><span>Semester 2, 2024</span></li>
           </ul></div>
       </li>
       <li>
         <span class="where">AI3D PLT</span>
-        <div class="what"><strong>Research Intern, 2D Virtual Try-On</strong>
-          <p>Reconstructed 3D clothing and bodies from images and worked on depth estimation.</p></div>
+        <div class="what">
+          <div class="stint"><strong>Research Intern, 2D Virtual Try-On</strong><span>Jan 2024 – Jun 2024</span></div>
+          <p>Estimated SMPL bodies from images to deform 3D clothing and improve garment alignment in a 2D virtual try-on network built on <a href="https://openaccess.thecvf.com/content/ICCV2021/papers/Zakharkin_Point-Based_Modeling_of_Human_Clothing_ICCV_2021_paper.pdf" target="_blank" rel="noopener">point-based clothing modelling</a>.</p></div>
       </li>
       <li>
         <span class="where">Intel</span>
-        <div class="what"><strong>Intern, 2022 and 2023</strong>
-          <p>CPU structural design, and silicon pre- and post-validation.</p></div>
+        <div class="what">
+          <div class="stint"><strong>Intern, Pre &amp; Post-Silicon Validation</strong><span>Nov 2022 – Feb 2023</span></div>
+            <p>Validated CPU designs from simulation to system level and debugged FPGA test failures through log and FSDB trace analysis.</p>
+          <div class="stint"><strong>Intern, CPU Structural Design</strong><span>Nov 2021 – Feb 2022</span></div>
+            <p>Resolved CPU timing and Calibre violations through static timing analysis and APR ECO edits in Synopsys PrimeTime and ICC2.</p>
+          </div>
       </li>
     </ul>
   </div>
@@ -291,8 +301,8 @@ footer .wrap { padding-block: 22px 32px; }
     <ul class="xp">
       <li><span class="where">2024</span><div class="what"><strong>Curtin Malaysia Postgraduate Research Scholarship (CMPRS)</strong></div></li>
       <li><span class="where">2023</span><div class="what"><strong>First Class Honours</strong></div></li>
-      <li><span class="where">2023</span><div class="what"><strong>Best Electrical &amp; Electronic Engineering Student Award 2023/2024</strong></div></li>
-      <li><span class="where">2021</span><div class="what"><strong>Curtin University Vice-Chancellor's List</strong></div></li>
+      <li><span class="where"></span><div class="what"><strong>Best Electrical &amp; Electronic Engineering Student Award 2023/2024</strong></div></li>
+      <li><span class="where">2021</span><div class="what"><strong>Curtin University Vice-Chancellor's List</strong> <em>(Top 1% student across all disciplines and global campuses)</em></div></li>
     </ul>
   </div>
 </section>
