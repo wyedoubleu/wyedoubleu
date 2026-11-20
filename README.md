@@ -19,7 +19,7 @@ I'm taking courses on **LLM**, **agentic AI** and **Vision-Language-Action (VLA)
 ### 🤝 Let's Collaborate
 I'm open to research internship opportunities or research collaborations. Feel free to reach out about potential projects or just to chat!
 
-### 🌐 Personal Page 
+### 📫 Personal Page 
 More about me at https://wyedoubleu.github.io/wyedoubleu/. 
 
 <!--
