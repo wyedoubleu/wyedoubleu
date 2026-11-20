@@ -10,9 +10,6 @@
 <meta property="og:description" content="What our review in Multimedia Tools and Applications found about 3D garment generation, avatar reconstruction and body-garment transformation.">
 <meta property="og:image" content="https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs11042-026-21423-2/MediaObjects/11042_2026_21423_Fig1_HTML.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <style>
 :root {
   color-scheme: light;
@@ -23,7 +20,7 @@
   --pastel-blush: #EAE2DD;
   --pastel-aqua: #C9DFE5;
 
-  --bg: #fbf9f7;
+  --bg: #ffffff;
   --surface: #ffffff;
   --surface-2: #f6f2ef;
   --plate: #ffffff;
@@ -44,8 +41,9 @@
   --s3: #4fb394;
   --grid: #eee9e5;
   --shadow: 0 1px 2px rgba(47,54,64,.03), 0 6px 20px rgba(47,54,64,.04);
-  --serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* San Francisco on Apple devices; closest system font elsewhere */
+  --serif: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 }
 /* Dark theme only when the reader picks it with the toggle. */
@@ -82,8 +80,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 1.1875rem;
-  line-height: 1.65;
+  font-size: 1.125rem;
+  line-height: 1.7;
   font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
 }
@@ -122,7 +120,7 @@ a:hover { text-decoration-thickness: 2px; }
 .prose .wide { max-width: 1040px; }
 .prose .mid { max-width: 860px; }
 section { padding-top: 24px; }
-h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; color: var(--ink); }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; color: var(--ink); }
 h2 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.35rem); margin: 72px auto 16px; }
 h3 { font-size: 1.4rem; margin: 40px auto 8px; }
 p { margin: 0 auto 18px; }
@@ -138,11 +136,14 @@ h2 + .lede, .lede { font-size: 1.25rem; color: var(--ink-2); }
 .hero { padding: 56px 0 8px; }
 #takeaways h2 { margin-top: 40px; }
 .hero .kicker { margin-bottom: 16px; }
-.hero h1 { font-size: clamp(2.4rem, 1.6rem + 3.6vw, 4.1rem); line-height: 1.03; margin: 0 auto 20px; font-weight: 500; letter-spacing: -.02em; }
+.hero h1 { font-size: clamp(2.4rem, 1.6rem + 3.6vw, 4.1rem); line-height: 1.03; margin: 0 auto 20px; font-weight: 700; letter-spacing: -.025em; }
 .hero h1 em { font-style: italic; color: var(--accent); }
 .hero .dek { font-size: clamp(1.2rem, 1.05rem + .5vw, 1.4rem); color: var(--ink-2); line-height: 1.5; margin-bottom: 28px; }
 .byline { display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: var(--sans); font-size: .875rem; color: var(--muted); padding: 16px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 24px; }
 .byline strong { color: var(--ink); font-weight: 600; }
+.byline { align-items: center; }
+.author { display: inline-flex; align-items: center; gap: 10px; width: 100%; color: var(--ink-2); }
+.avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--pastel-blue); }
 .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: .75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--pastel-aqua); color: #2f3640; }
 .cta { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -204,6 +205,14 @@ thead th { font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-tran
 tbody tr:last-child td { border-bottom: 0; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 td .nm { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.ds-table { table-layout: fixed; min-width: 640px; }
+.ds-table .c-name { width: 15%; }
+.ds-table .c-year { width: 7%; }
+.ds-table .c-n { width: 9%; }
+.ds-table .c-cap { width: 13%; }
+.ds-table .c-adds { width: 47%; }
+.ds-table th { white-space: normal; line-height: 1.3; vertical-align: bottom; }
+.ds-table td:nth-child(5), .ds-table .nm { white-space: normal; }
 .tnote { font-family: var(--sans); font-size: .8rem; color: var(--muted); margin-top: 10px; }
 
 /* ---------- callouts & cards ---------- */
@@ -243,7 +252,7 @@ td .nm { font-weight: 600; color: var(--ink); white-space: nowrap; }
 .chart-title { font-size: 1.05rem; font-weight: 650; margin: 0 0 2px; color: var(--ink); }
 .chart-sub { font-size: .84rem; color: var(--ink-2); margin: 0 0 14px; max-width: none; }
 .chart-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-bottom: 8px; }
-.seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--tint-blue); border: 1px solid transparent; }
+.seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; padding: 3px; border-radius: 10px; background: var(--tint-blue); border: 1px solid transparent; }
 .seg button { font: inherit; font-size: .8rem; font-weight: 600; border: 0; background: none; color: var(--ink-2); padding: 6px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--rule-strong); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 0; padding: 0; font-size: .8rem; color: var(--ink-2); }
@@ -347,7 +356,7 @@ footer p { max-width: 760px; margin: 0 0 8px; }
     <h1>Dressing the <em>digital human</em>: a tour of 3D virtual try-on</h1>
     <p class="dek">Our new open-access review maps the whole 3D virtual try-on pipeline: how digital garments are made, how a shopper's body becomes an avatar, and how the two are fitted together. It also compares the methods that do each step.</p>
     <div class="byline">
-      <span><strong>Yi Wei Fung, King Hann Lim &amp; Jonathan Then Sien Phang</strong></span>
+      <span class="author"><img class="avatar" src="images/author.webp" width="44" height="44" alt="Yi Wei Fung"><span><strong>Yi Wei Fung</strong> with King Hann Lim &amp; Jonathan Then Sien Phang</span></span>
       <span>Curtin University Malaysia</span>
       <span>Published 12 April 2026</span>
       <span>~12 min read</span>
@@ -474,8 +483,9 @@ footer p { max-width: 760px; margin: 0 0 8px; }
     <p>Datasets give ready-made garments with rich annotations. These are the five we compared:</p>
     <div class="wide">
       <div class="tscroll">
-        <table>
-          <thead><tr><th>Dataset</th><th class="num">Year</th><th class="num">Garment models</th><th class="num">Categories</th><th>Captured with</th><th>What it adds</th></tr></thead>
+        <table class="ds-table">
+          <colgroup><col class="c-name"><col class="c-year"><col class="c-n"><col class="c-n"><col class="c-cap"><col class="c-adds"></colgroup>
+          <thead><tr><th>Dataset</th><th class="num">Year</th><th class="num">Garment<br>models</th><th class="num">Cate-<br>gories</th><th>Captured<br>with</th><th>What it adds</th></tr></thead>
           <tbody>
             <tr><td><span class="nm">Deep Fashion3D</span></td><td class="num">2020</td><td class="num">2,078</td><td class="num">10</td><td>Multi-view stereo</td><td>Real garments (563 instances) with multi-view images, 3D feature lines and 3D body pose</td></tr>
             <tr><td><span class="nm">SIZER</span></td><td class="num">2020</td><td class="num">2,000</td><td class="num">10</td><td>3D scans</td><td>The first dataset of people in different garment sizes: 100 people, sizes S–XL, with SMPL+G registration and body shape under clothing</td></tr>
