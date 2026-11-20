@@ -1,6 +1,8 @@
 ## Hello World 👋
 
-I'm Yi Wei, you can call me Evie. 😄 a girl figuring life out
+I'm Yi Wei, you can call me Evie. 😄 a girl figuring life out. 
+
+Please find my personal webpage at https://wyedoubleu.github.io/. 
 
 My research focus on developing an interactive and personalized virtual try-on system. My goals is to enhance online shopping experience by letting consumers to see, explore, and interact with clothing items on their personalize avatar. 
 
